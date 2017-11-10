@@ -9,4 +9,7 @@
     <color name="red_logo">#8D2830</color>
     <color name="gray_logo">#E7E5EA</color>
     <color name="blue_logo">#65baec</color>
+
+    <color name="mygray">#ededed</color>
+    <color name="myblue">#b4def7</color>
 </resources>
