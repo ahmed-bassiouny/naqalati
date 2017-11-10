@@ -6,8 +6,8 @@ package com.ntamtech.naqalati.model;
 
 public class FirebaseRoot {
     // Database
-    public static final String DB_USER = "DB_USER";
-    public static final String DB_DRIVER = "DB_DRIVER";
-    // Storage
-    public static final String ST_IMAGE = "image";
+    public static final String DB_USER = "USER";
+    public static final String DB_DRIVER = "DRIVER";
+    public static final String DB_LAT="lat";
+    public static final String DB_LNG="lng";
 }

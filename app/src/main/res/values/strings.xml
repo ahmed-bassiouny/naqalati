@@ -22,5 +22,8 @@
     <string name="enter_phone">من فضلك ادخل رقم تليفون صحيح </string>
     <string name="invalid_password">كلمة السر اقل من 6 حروف</string>
     <string name="error">حدث خطا ما برجاء المحاولة مرة اخرى</string>
+    <string name="setting">الاعدادات</string>
+    <string name="open_gps">فتح خاصية تحديد الموقع من الاعدادات</string>
+    <string name="google_maps_key">AIzaSyDyU5o83wUPIcZ2XCW2MaRMG3rD5j84pJA</string>
 
 </resources>

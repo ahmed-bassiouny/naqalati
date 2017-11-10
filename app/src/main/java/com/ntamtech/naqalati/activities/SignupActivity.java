@@ -1,15 +1,18 @@
 package com.ntamtech.naqalati.activities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +38,8 @@ import com.ntamtech.naqalati.helper.Utils;
 import com.ntamtech.naqalati.model.FirebaseRoot;
 import com.ntamtech.naqalati.model.User;
 
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SignupActivity extends AppCompatActivity {
@@ -44,7 +49,8 @@ public class SignupActivity extends AppCompatActivity {
     private ProgressBar progress;
     private Button btnRegister;
     private EditText etPhone, etPassword, etConfirmPassword, etName;
-    private final int requestLocation=123;
+    private final int requestLocationPermission =123;
+
     private Uri photoUri;
 
     @Override
@@ -58,7 +64,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED)
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestLocation);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestLocationPermission);
         }
 
     private void onClick() {
@@ -94,8 +100,8 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void uploadImage() {
-
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference(FirebaseRoot.ST_IMAGE);
+        String userId =FirebaseAuth.getInstance().getCurrentUser().getUid();
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference(userId);
         storageRef.putFile(photoUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -127,10 +133,10 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Bitmap photoBitmap = ImagePicker.getImageFromResult(this, requestCode, resultCode, data);
-        if(photoBitmap!=null) {
+        if(photoBitmap!=null&&data!=null) {
             profileImage.setImageBitmap(photoBitmap);
+            photoUri=data.getData();
         }
-        photoUri=data.getData();
     }
 
     private void startSignup() {
@@ -150,11 +156,8 @@ public class SignupActivity extends AppCompatActivity {
         user.setUserPhone(etPhone.getText().toString());
         user.setUserPasswrod(etPassword.getText().toString());
         user.setUserAvatar(url);
-        Location location = getLastKnownLocation();
-        if(location != null){
-            user.setLat(location.getLatitude());
-            user.setLng(location.getLongitude());
-        }
+        user.setLat(0.0);
+        user.setLng(0.0);
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -163,7 +166,6 @@ public class SignupActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     stopSignup();
                     Toast.makeText(SignupActivity.this, R.string.register_success, Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SignupActivity.this, HomeActivity.class));
                     finish();
                 }else {
                     stopSignup();
@@ -192,21 +194,12 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 });
     }
-    private Location getLastKnownLocation(){
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            LocationManager locationManager= (LocationManager)getSystemService(LOCATION_SERVICE);
-            Location location =locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            return location;
-        }else {
-            return null;
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==requestLocation &&grantResults[0]==PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestLocation);
+        if(requestCode== requestLocationPermission &&grantResults[0]==PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestLocationPermission);
         }
     }
 }

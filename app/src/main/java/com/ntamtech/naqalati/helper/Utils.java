@@ -1,12 +1,15 @@
 package com.ntamtech.naqalati.helper;
 
 import android.content.Context;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeErrorDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeWarningDialog;
 import com.ntamtech.naqalati.R;
 import com.ntamtech.naqalati.activities.SigninActivity;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 /**
  * Created by bassiouny on 10/11/17.
@@ -46,6 +49,10 @@ public class Utils {
                 .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
                 .setCancelable(true)
                 .show();
+    }
+    public static boolean gpsIsEnable(Context context){
+        LocationManager locationManager= (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
 }
