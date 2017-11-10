@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">NAQALATI</string>
+    <!-- sign in-->
+    <string name="number_phone">رقم التليفون</string>
+    <string name="password">الرقم السرى</string>
+    <string name="submit">دخول</string>
+    <string name="newuser">هل انت مستخدم جديد ؟ تسجيل حساب</string>
+
+    <!-- sign up-->
+    <string name="choose_image">اختيار صورة جديدة</string>
+    <string name="confirm_password">تأكيد الرقم السرى</string>
+    <string name="user_name">اسم المستخدم</string>
+    <string name="register">تسجيل</string>
+
+
+
+
+</resources>
