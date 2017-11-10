@@ -21,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -120,6 +121,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             userMarker.remove();
         LatLng person = new LatLng(currentLat,currentLng);
         MarkerOptions markerOptions =new MarkerOptions().position(person).title("Person Name");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.person_marker));
         userMarker= googleMap.addMarker(markerOptions);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(person));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerOptions.getPosition(), 15), 1000, null);

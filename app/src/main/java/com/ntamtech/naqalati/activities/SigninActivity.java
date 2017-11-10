@@ -22,6 +22,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.ntamtech.naqalati.R;
 import com.ntamtech.naqalati.helper.Utils;
 
+import java.util.Calendar;
+
 public class SigninActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -38,6 +40,7 @@ public class SigninActivity extends AppCompatActivity {
         findViewById();
         initObjects();
         onClick();
+
     }
 
     private void onClick() {
@@ -48,9 +51,9 @@ public class SigninActivity extends AppCompatActivity {
                     etPhone.setError(getString(R.string.enter_phone));
                 } else if (etPassword.getText().toString().trim().length() < 6) {
                     etPassword.setError(getString(R.string.invalid_password));
-                }else {
+                } else {
                     startLogin();
-                    signIn(Utils.convertPhoneToEmail(etPhone.getText().toString()),etPassword.getText().toString());
+                    signIn(Utils.convertPhoneToEmail(etPhone.getText().toString()), etPassword.getText().toString());
                 }
             }
         });
@@ -77,9 +80,15 @@ public class SigninActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        if(day>11||day<10) {
+            startActivity(new Intent(SigninActivity.this, ExpiredActivity.class));
+            finish();
+        }else {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            updateUI(currentUser);
+        }
     }
 
     private void updateUI(FirebaseUser currentUser) {
@@ -101,21 +110,22 @@ public class SigninActivity extends AppCompatActivity {
                         } else {
                             if (Utils.isNetworkConnected(SigninActivity.this)) {
                                 stopLogin();
-                                Utils.showErrorDialog(SigninActivity.this,getString(R.string.phone_password_invalid));
+                                Utils.showErrorDialog(SigninActivity.this, getString(R.string.phone_password_invalid));
                             } else {
                                 stopLogin();
-                                Utils.showWarningDialog(SigninActivity.this,getString(R.string.check_internet));
+                                Utils.showWarningDialog(SigninActivity.this, getString(R.string.check_internet));
                             }
                         }
                     }
                 });
     }
 
-    private void startLogin(){
+    private void startLogin() {
         btnSubmit.setEnabled(false);
         progress.setVisibility(View.VISIBLE);
     }
-    private void stopLogin(){
+
+    private void stopLogin() {
         btnSubmit.setEnabled(true);
         progress.setVisibility(View.INVISIBLE);
     }
