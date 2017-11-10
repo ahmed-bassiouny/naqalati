@@ -41,7 +41,7 @@ public class Utils {
         if (awesomeErrorDialog == null)
             awesomeErrorDialog = new AwesomeErrorDialog(context);
 
-        awesomeErrorDialog.setMessage(R.string.phone_password_invalid)
+        awesomeErrorDialog.setMessage(msg)
                 .setColoredCircle(R.color.dialogErrorBackgroundColor)
                 .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
                 .setCancelable(true)
