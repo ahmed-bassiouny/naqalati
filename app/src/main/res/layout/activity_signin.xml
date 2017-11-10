@@ -37,6 +37,7 @@
                 android:inputType="phone"
                 android:digits="0123456789"
                 android:maxLines="1"
+                android:maxLength="11"
                 android:lines="1"
                 android:drawablePadding="5dp"
                 android:background="@android:color/transparent"
