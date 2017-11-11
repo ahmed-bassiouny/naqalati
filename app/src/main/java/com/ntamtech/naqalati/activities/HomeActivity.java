@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
@@ -31,21 +32,34 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ntamtech.naqalati.R;
+import com.ntamtech.naqalati.helper.Utils;
+import com.ntamtech.naqalati.model.Driver;
 import com.ntamtech.naqalati.model.FirebaseRoot;
+import com.ntamtech.naqalati.model.User;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity implements LocationListener ,OnMapReadyCallback{
 
     SupportMapFragment mapFragment;
     LocationManager locationManager;
     ImageView signout;
+    ProgressBar progress; // this progress to load all data first time
     // local variable
     private final int requestLocationPermission =123;
     private double currentLat=0.0;
     private double currentLng=0.0;
-    GoogleMap googleMap;
-    Marker userMarker;
+    private boolean zoomOnMap =true; // to make zoom first time on map
+    private GoogleMap googleMap;
+    private Marker userMarker;
+    private String myId="";
+    private Timer timerDrivers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +67,32 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         findViewById();
         initObjects();
         onClick();
+        getInfoFromDB();
+    }
+
+    private void getInfoFromDB() {
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER).child(myId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if(user!=null){
+                    if(user.getCurrentRequest().isEmpty()){
+                        startTime();
+                    }else {
+                        // TODO download request
+                    }
+                }else {
+                    Utils.ContactSuppot(HomeActivity.this);
+                }
+                progress.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.ContactSuppot(HomeActivity.this);
+                progress.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void onClick() {
@@ -101,11 +141,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private void initObjects() {
         mapFragment.getMapAsync(this);
         locationManager=(LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        setMyId();
     }
 
     private void findViewById() {
         mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
         signout=findViewById(R.id.signout);
+        progress = findViewById(R.id.progress);
 
     }
 
@@ -134,16 +176,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onLocationChanged(Location location) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user==null)
-            return;
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
-                .child(user.getUid())
+                .child(myId)
                 .child(FirebaseRoot.DB_LAT)
                 .setValue(location.getLatitude());
 
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
-                .child(user.getUid())
+                .child(myId)
                 .child(FirebaseRoot.DB_LNG)
                 .setValue(location.getLongitude());
         currentLat=location.getLatitude();
@@ -175,25 +214,92 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private void setLocation(){
         if(googleMap==null)
             return;
-        if(userMarker!=null)
-            userMarker.remove();
-        LatLng person = new LatLng(currentLat,currentLng);
-        MarkerOptions markerOptions =new MarkerOptions().position(person).title("Person Name");
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.person_marker));
-        userMarker= googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(person));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerOptions.getPosition(), 15), 1000, null);
+        addMeOnMap();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         initLocationListener();
+        zoomOnMap=true;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         locationManager.removeUpdates(this);
+        stopTimer();
+    }
+    private void setMyId(){
+        if(myId.isEmpty() && FirebaseAuth.getInstance().getCurrentUser()!=null){
+            myId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }else {
+            Utils.ContactSuppot(this);
+        }
+    }
+
+    private void startTime() {
+        if(timerDrivers == null) {
+            timerDrivers = new Timer();
+        }
+        timerDrivers.scheduleAtFixedRate(getAllDriverByTimer(), 1000, 5000);
+    }
+    private void stopTimer(){
+        if(timerDrivers!=null) {
+            timerDrivers.cancel();
+            timerDrivers=null;
+        }
+    }
+
+    private TimerTask getAllDriverByTimer(){
+        return new TimerTask() {
+
+            @Override
+            public void run() {
+                getAllDriver();
+            }
+        };
+    }
+    private void getAllDriver(){
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot!=null){
+                    for (DataSnapshot snapshot:dataSnapshot.getChildren()){
+                        Driver driver = snapshot.getValue(Driver.class);
+                        addDriverOnMap(driver.getLat(),driver.getLng());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void addDriverOnMap(Double lat,Double lng){
+        if(lat>0 &&lng>0) {
+            googleMap.clear();
+            addMeOnMap();
+            LatLng person = new LatLng(lat, lng);
+            MarkerOptions markerOptions = new MarkerOptions().position(person).title("Person Name");
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker));
+            googleMap.addMarker(markerOptions);
+        }
+    }
+
+    private void addMeOnMap() {
+        if(userMarker!=null)
+            userMarker.remove();
+        LatLng person = new LatLng(currentLat,currentLng);
+        MarkerOptions markerOptions =new MarkerOptions().position(person).title("Person Name");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.person_marker));
+        userMarker= googleMap.addMarker(markerOptions);
+        if(zoomOnMap) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(person));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerOptions.getPosition(), 15), 1000, null);
+            zoomOnMap=false;
+        }
     }
 }

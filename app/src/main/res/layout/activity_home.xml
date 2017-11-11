@@ -20,5 +20,10 @@
         android:layout_margin="10dp"
         android:id="@+id/signout"
         android:background="@drawable/border_edit_text"/>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/progress"/>
 
 </RelativeLayout>

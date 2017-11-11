@@ -161,6 +161,7 @@ public class SignupActivity extends AppCompatActivity {
         user.setUserAvatar(url);
         user.setLat(0.0);
         user.setLng(0.0);
+        user.setCurrentRequest("");
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {

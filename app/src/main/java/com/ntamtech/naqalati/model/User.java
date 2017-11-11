@@ -12,6 +12,7 @@ public class User {
     private String userPasswrod;
     private Double lat;
     private Double lng;
+    private String currentRequest;
 
     public String getUserName() {
         return userName;
@@ -46,6 +47,8 @@ public class User {
     }
 
     public Double getLat() {
+        if(lat==null)
+            lat=0.0;
         return lat;
     }
 
@@ -54,10 +57,22 @@ public class User {
     }
 
     public Double getLng() {
+        if(lng==null)
+            lng=0.0;
         return lng;
     }
 
     public void setLng(Double lng) {
         this.lng = lng;
+    }
+
+    public String getCurrentRequest() {
+        if(currentRequest==null)
+            currentRequest="";
+        return currentRequest;
+    }
+
+    public void setCurrentRequest(String currentRequest) {
+        this.currentRequest = currentRequest;
     }
 }

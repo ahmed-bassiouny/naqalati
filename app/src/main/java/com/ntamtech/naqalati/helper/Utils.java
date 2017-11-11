@@ -1,11 +1,13 @@
 package com.ntamtech.naqalati.helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeErrorDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeWarningDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.ntamtech.naqalati.R;
 import com.ntamtech.naqalati.activities.SigninActivity;
 
@@ -50,9 +52,23 @@ public class Utils {
                 .setCancelable(true)
                 .show();
     }
-    public static boolean gpsIsEnable(Context context){
-        LocationManager locationManager= (LocationManager) context.getSystemService(LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+    public static void ContactSuppot(final Activity activity) {
+        AwesomeErrorDialog awesomeErrorDialog = new AwesomeErrorDialog(activity);
+        awesomeErrorDialog.setMessage(activity.getString(R.string.contact_suppoty))
+                .setColoredCircle(R.color.dialogErrorBackgroundColor)
+                .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+                .setCancelable(true)
+                .setButtonText(activity.getString(R.string.yes))
+                .setButtonBackgroundColor(R.color.red_logo)
+                .setButtonTextColor(R.color.white)
+                .setErrorButtonClick(new Closure() {
+                    @Override
+                    public void exec() {
+                        activity.finish();
+                    }
+                })
+                .show();
     }
 
 }
