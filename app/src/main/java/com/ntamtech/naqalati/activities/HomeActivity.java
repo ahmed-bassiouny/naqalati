@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ntamtech.naqalati.R;
 import com.ntamtech.naqalati.model.FirebaseRoot;
@@ -134,13 +135,16 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onLocationChanged(Location location) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user==null)
+            return;
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(user.getUid())
                 .child(FirebaseRoot.DB_LAT)
                 .setValue(location.getLatitude());
 
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(user.getUid())
                 .child(FirebaseRoot.DB_LNG)
                 .setValue(location.getLongitude());
         currentLat=location.getLatitude();
@@ -180,5 +184,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         userMarker= googleMap.addMarker(markerOptions);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(person));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerOptions.getPosition(), 15), 1000, null);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        locationManager.removeUpdates(this);
     }
 }

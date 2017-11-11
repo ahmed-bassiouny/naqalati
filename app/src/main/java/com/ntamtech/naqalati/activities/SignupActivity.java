@@ -148,8 +148,9 @@ public class SignupActivity extends AppCompatActivity {
     private void stopSignup() {
         progress.setVisibility(View.INVISIBLE);
         btnRegister.setEnabled(true);
+        /*
         if(FirebaseAuth.getInstance().getCurrentUser()!=null)
-            FirebaseAuth.getInstance().signOut();
+            FirebaseAuth.getInstance().signOut();*/
     }
 
 
@@ -189,9 +190,9 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(FirebaseRoot.DB_USER).build();
-                            FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates);
+                            FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates);*/
                             uploadImage();
                         } else {
                             stopSignup();
