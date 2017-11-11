@@ -115,6 +115,8 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
                         stopSignup();
+                        if(FirebaseAuth.getInstance().getCurrentUser()!=null)
+                            FirebaseAuth.getInstance().signOut();
                         Utils.showErrorDialog(SignupActivity.this, exception.getLocalizedMessage());
                     }
                 });
@@ -142,15 +144,12 @@ public class SignupActivity extends AppCompatActivity {
 
     private void startSignup() {
         progress.setVisibility(View.VISIBLE);
-        btnRegister.setEnabled(false);
+        btnRegister.setVisibility(View.INVISIBLE);
     }
 
     private void stopSignup() {
         progress.setVisibility(View.INVISIBLE);
-        btnRegister.setEnabled(true);
-        /*
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null)
-            FirebaseAuth.getInstance().signOut();*/
+        btnRegister.setVisibility(View.VISIBLE);
     }
 
 
@@ -173,6 +172,8 @@ public class SignupActivity extends AppCompatActivity {
                     finish();
                 }else {
                     stopSignup();
+                    if(FirebaseAuth.getInstance().getCurrentUser()!=null)
+                        FirebaseAuth.getInstance().signOut();
                     Utils.showWarningDialog(SignupActivity.this,getString(R.string.error));
                 }
             }
@@ -190,12 +191,14 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(FirebaseRoot.DB_USER).build();
-                            FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates);*/
+                            FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates);
                             uploadImage();
                         } else {
                             stopSignup();
+                            if(FirebaseAuth.getInstance().getCurrentUser()!=null)
+                                FirebaseAuth.getInstance().signOut();
                             Utils.showErrorDialog(SignupActivity.this, task.getException().getLocalizedMessage());
                         }
                     }

@@ -109,16 +109,14 @@ public class SigninActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            /*FirebaseUser user = mAuth.getCurrentUser();
-                            if(user.getDisplayName().equals(FirebaseRoot.DB_USER))
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if(user.getDisplayName()!=null &&user.getDisplayName().equals(FirebaseRoot.DB_USER))
                                 updateUI(user);
                             else {
                                 stopLogin();
                                 FirebaseAuth.getInstance().signOut();
                                 Utils.showErrorDialog(SigninActivity.this, getString(R.string.user_not_found));
-                            }*/
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            }
                         } else {
                             if (Utils.isNetworkConnected(SigninActivity.this)) {
                                 stopLogin();

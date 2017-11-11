@@ -53,7 +53,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         findViewById();
         initObjects();
         onClick();
-        initLocationListener();
     }
 
     private void onClick() {
@@ -184,6 +183,12 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         userMarker= googleMap.addMarker(markerOptions);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(person));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerOptions.getPosition(), 15), 1000, null);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initLocationListener();
     }
 
     @Override
