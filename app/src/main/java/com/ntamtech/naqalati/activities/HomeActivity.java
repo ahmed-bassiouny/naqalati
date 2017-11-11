@@ -45,7 +45,8 @@ import com.ntamtech.naqalati.model.User;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HomeActivity extends AppCompatActivity implements LocationListener ,OnMapReadyCallback{
+public class HomeActivity extends AppCompatActivity implements LocationListener
+        ,OnMapReadyCallback,GoogleMap.OnMarkerClickListener{
 
     SupportMapFragment mapFragment;
     LocationManager locationManager;
@@ -267,7 +268,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 if(dataSnapshot!=null){
                     for (DataSnapshot snapshot:dataSnapshot.getChildren()){
                         Driver driver = snapshot.getValue(Driver.class);
-                        addDriverOnMap(driver.getLat(),driver.getLng());
+                        if(driver.getCurrentRequest().isEmpty())
+                            addDriverOnMap(snapshot.getKey(),driver.getLat(),driver.getLng());
                     }
                 }
             }
@@ -278,12 +280,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             }
         });
     }
-    private void addDriverOnMap(Double lat,Double lng){
+    private void addDriverOnMap(String driverId,Double lat,Double lng){
         if(lat>0 &&lng>0) {
             googleMap.clear();
             addMeOnMap();
             LatLng person = new LatLng(lat, lng);
-            MarkerOptions markerOptions = new MarkerOptions().position(person).title("Person Name");
+            MarkerOptions markerOptions = new MarkerOptions().position(person);
+            markerOptions.snippet(driverId);
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker));
             googleMap.addMarker(markerOptions);
         }
@@ -293,7 +296,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         if(userMarker!=null)
             userMarker.remove();
         LatLng person = new LatLng(currentLat,currentLng);
-        MarkerOptions markerOptions =new MarkerOptions().position(person).title("Person Name");
+        MarkerOptions markerOptions =new MarkerOptions().position(person);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.person_marker));
         userMarker= googleMap.addMarker(markerOptions);
         if(zoomOnMap) {
@@ -301,5 +304,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerOptions.getPosition(), 15), 1000, null);
             zoomOnMap=false;
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if(!marker.getSnippet().isEmpty()){
+
+        }
+        return false;
     }
 }

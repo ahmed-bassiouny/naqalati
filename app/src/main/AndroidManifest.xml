@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -33,13 +34,17 @@
         </activity>
         <activity
             android:name=".activities.SignupActivity"
-            android:theme="@style/AppTheme.NoAction"></activity>
+            android:theme="@style/AppTheme.NoAction" />
         <activity android:name=".activities.HomeActivity" />
-        <activity android:name=".activities.ExpiredActivity"></activity>
+        <activity android:name=".activities.ExpiredActivity" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="a07905da1fb4c784f0369b04a71691297ca15843" />
+
+        <activity android:name=".activities.ShowDriverInfoActivity"
+            android:theme="@android:style/Theme.Dialog"
+            android:excludeFromRecents="true"></activity>
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

@@ -19,6 +19,11 @@
     <string name="invalid_image">برجاء اختيار صورة للحساب</string>
     <string name="register_success">تم تسجيلك نجاح</string>
 
+    <!-- show driver info -->
+    <string name="driver_name">اسم السائق : </string>
+    <string name="car_number">رقم السيارة : </string>
+    <string name="car_type">نوع السيارة : </string>
+    <string name="driver_phone">رقم تليفون السائق : </string>
     <!-- general-->
     <string name="check_internet">من فضلك تاكد من اتصالك بالانترنت</string>
     <string name="enter_phone">من فضلك ادخل رقم تليفون صحيح </string>
@@ -31,5 +36,6 @@
     <string name="contact_suppoty">حدث خطا ما برجاء التحدث مع الدعم</string>
     <string name="you_want_signout">هل تريد تسجيل الخروج ؟</string>
     <string name="google_maps_key">AIzaSyDyU5o83wUPIcZ2XCW2MaRMG3rD5j84pJA</string>
+
 
 </resources>
