@@ -15,8 +15,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,7 +36,10 @@ import com.ntamtech.naqalati.model.FirebaseRoot;
 
 public class HomeActivity extends AppCompatActivity implements LocationListener ,OnMapReadyCallback{
 
+    SupportMapFragment mapFragment;
     LocationManager locationManager;
+    ImageView signout;
+    // local variable
     private final int requestLocationPermission =123;
     private double currentLat=0.0;
     private double currentLng=0.0;
@@ -42,18 +49,66 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        locationManager=(LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        findViewById();
+        initObjects();
+        onClick();
+        initLocationListener();
+    }
+
+    private void onClick() {
+        signout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AwesomeInfoDialog(HomeActivity.this)
+                        .setTitle(R.string.app_name)
+                        .setMessage(R.string.you_want_signout)
+                        .setColoredCircle(R.color.dialogInfoBackgroundColor)
+                        .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
+                        .setCancelable(true)
+                        .setPositiveButtonText(getString(R.string.yes))
+                        .setPositiveButtonbackgroundColor(R.color.red_logo)
+                        .setPositiveButtonTextColor(R.color.white)
+                        .setNegativeButtonText(getString(R.string.no))
+                        .setNegativeButtonbackgroundColor(R.color.dialogInfoBackgroundColor)
+                        .setNegativeButtonTextColor(R.color.white)
+                        .setPositiveButtonClick(new Closure() {
+                            @Override
+                            public void exec() {
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(HomeActivity.this,SigninActivity.class));
+                                finish();
+                            }
+                        })
+                        .setNegativeButtonClick(new Closure() {
+                            @Override
+                            public void exec() {
+                            }
+                        })
+                        .show();
+            }
+        });
+    }
+
+    private void initLocationListener() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,5000,0, this);
             locationManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER,3000,0, this);
-
         }else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestLocationPermission);
         }
     }
+
+    private void initObjects() {
+        mapFragment.getMapAsync(this);
+        locationManager=(LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    private void findViewById() {
+        mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+        signout=findViewById(R.id.signout);
+
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
