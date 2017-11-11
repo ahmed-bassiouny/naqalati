@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ntamtech.naqalati.R;
 import com.ntamtech.naqalati.helper.Utils;
+import com.ntamtech.naqalati.model.FirebaseRoot;
 
 import io.fabric.sdk.android.Fabric;
 import java.util.Calendar;
@@ -109,7 +110,13 @@ public class SigninActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            if(user.getDisplayName().equals(FirebaseRoot.DB_USER))
+                                updateUI(user);
+                            else {
+                                stopLogin();
+                                FirebaseAuth.getInstance().signOut();
+                                Utils.showErrorDialog(SigninActivity.this, getString(R.string.user_not_found));
+                            }
                         } else {
                             if (Utils.isNetworkConnected(SigninActivity.this)) {
                                 stopLogin();
