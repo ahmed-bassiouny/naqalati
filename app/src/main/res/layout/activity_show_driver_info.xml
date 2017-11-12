@@ -100,7 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            tools:visibility="visible">
 
             <ProgressBar
                 android:id="@+id/progress_sub_info"
@@ -111,7 +112,8 @@
                 android:id="@+id/tv_waiting"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="@string/contact_driver"/>
         </LinearLayout>
     </LinearLayout>
 

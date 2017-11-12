@@ -37,6 +37,7 @@ import com.mvc.imagepicker.ImagePicker;
 import com.ntamtech.naqalati.R;
 import com.ntamtech.naqalati.helper.Utils;
 import com.ntamtech.naqalati.model.FirebaseRoot;
+import com.ntamtech.naqalati.model.RequestStatus;
 import com.ntamtech.naqalati.model.User;
 
 import java.util.List;
@@ -162,6 +163,7 @@ public class SignupActivity extends AppCompatActivity {
         user.setLat(0.0);
         user.setLng(0.0);
         user.setCurrentRequest("");
+        user.setRequestStatus(RequestStatus.NO_REQUEST);
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {

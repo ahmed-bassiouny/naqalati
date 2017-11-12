@@ -13,6 +13,7 @@ public class User {
     private Double lat;
     private Double lng;
     private String currentRequest;
+    private RequestStatus requestStatus;
 
     public String getUserName() {
         return userName;
@@ -74,5 +75,13 @@ public class User {
 
     public void setCurrentRequest(String currentRequest) {
         this.currentRequest = currentRequest;
+    }
+
+    public RequestStatus getRequestStatus() {
+        return requestStatus;
+    }
+
+    public void setRequestStatus(RequestStatus requestStatus) {
+        this.requestStatus = requestStatus;
     }
 }

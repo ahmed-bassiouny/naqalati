@@ -26,6 +26,10 @@
     <string name="driver_phone">رقم تليفون السائق : </string>
     <string name="request_driver">طلب السائق </string>
     <string name="cancel_request">الغاء الطلب </string>
+    <string name="request_accept">تم قبول طلبك بنجاح</string>
+    <string name="request_refuse">للاسف لم يتم قبول طلبك</string>
+    <string name="contact_driver">يتم الان الاتصال بالسائق برجاء الانتظاء</string>
+
     <!-- general-->
     <string name="check_internet">من فضلك تاكد من اتصالك بالانترنت</string>
     <string name="enter_phone">من فضلك ادخل رقم تليفون صحيح </string>

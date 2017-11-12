@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
@@ -35,6 +36,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ntamtech.naqalati.R;
+import com.ntamtech.naqalati.helper.SharedPref;
 import com.ntamtech.naqalati.helper.Utils;
 import com.ntamtech.naqalati.helper.Constant;
 import com.ntamtech.naqalati.model.Driver;
@@ -56,6 +58,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     private double currentLat=0.0;
     private double currentLng=0.0;
     private boolean zoomOnMap =true; // to make zoom first time on map
+    // have request if true this mean i maked request so marker don't clickable
+    private boolean haveRequest=true;
     private GoogleMap googleMap;
     private Marker userMarker;
     private String myId="";
@@ -67,7 +71,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         findViewById();
         initObjects();
         onClick();
-        getInfoFromDB();
     }
 
     private void getInfoFromDB() {
@@ -76,10 +79,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if(user!=null){
+                    SharedPref.setInfoUser(HomeActivity.this,user.getUserName(),user.getUserAvatar());
                     if(user.getCurrentRequest().isEmpty()){
+                        haveRequest=false;
                         startTime();
                     }else {
                         // TODO download request
+                        haveRequest=true;
                     }
                 }else {
                     Utils.ContactSuppot(HomeActivity.this);
@@ -188,6 +194,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         currentLat=location.getLatitude();
         currentLng=location.getLongitude();
         setLocation();
+        SharedPref.setLocationUser(HomeActivity.this,currentLat,currentLng);
     }
 
     @Override
@@ -217,12 +224,14 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             return;
         addMeOnMap();
     }
-
     @Override
-    protected void onStart() {
-        super.onStart();
-        initLocationListener();
+    protected void onResume() {
+        super.onResume();
+        if(googleMap!=null)
+            googleMap.clear();
         zoomOnMap=true;
+        getInfoFromDB();
+        initLocationListener();
     }
 
     @Override
@@ -310,7 +319,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if(marker.getSnippet()!=null){
+        if(!haveRequest&&marker.getSnippet()!=null){
             // send driver id to show info activity
             Intent intent=new Intent(HomeActivity.this,ShowDriverInfoActivity.class);
             intent.putExtra(Constant.SHOW_DRIVER_INFO,marker.getSnippet());
