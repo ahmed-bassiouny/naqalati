@@ -11,6 +11,7 @@ public class SharedPref {
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String nameKey = "nameKey";
+    public static final String phoneKey = "phoneKey";
     public static final String imageKey = "imageKey";
     public static final String latKey = "latKey";
     public static final String lngKey = "lngKey";
@@ -20,10 +21,11 @@ public class SharedPref {
         if(sharedpreferences==null)
             sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
     }
-    public static void setInfoUser(Context context,String name,String imageUrl){
+    public static void setInfoUser(Context context,String name,String phone,String imageUrl){
         init(context);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(nameKey,name);
+        editor.putString(phoneKey,phone);
         editor.putString(imageKey,imageUrl);
         editor.commit();
     }
@@ -37,6 +39,10 @@ public class SharedPref {
     public static String getUserName(Context context){
         init(context);
         return sharedpreferences.getString(nameKey,"");
+    }
+    public static String getPhone(Context context){
+        init(context);
+        return sharedpreferences.getString(phoneKey,"");
     }
     public static String getUserImage(Context context){
         init(context);

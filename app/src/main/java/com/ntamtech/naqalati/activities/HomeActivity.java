@@ -79,7 +79,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if(user!=null){
-                    SharedPref.setInfoUser(HomeActivity.this,user.getUserName(),user.getUserAvatar());
+                    SharedPref.setInfoUser(HomeActivity.this,user.getUserName(),user.getUserPhone(),user.getUserAvatar());
                     if(user.getCurrentRequest().isEmpty()){
                         haveRequest=false;
                         startTime();

@@ -8,6 +8,7 @@ public class RequestInfo {
     // user
     private String userId;
     private String userName;
+    private String userPhone;
     private String userImage;
     private Double userLat;
     private Double userLng;
@@ -23,9 +24,10 @@ public class RequestInfo {
     private RequestStatus requestStatus;
     private String reason;
 
-    public void setUserInfo(String userId,String userName , String userImage ,Double userLat,Double userLng){
+    public void setUserInfo(String userId,String userName ,String userPhone, String userImage ,Double userLat,Double userLng){
         this.userId=userId;
         this.userName=userName;
+        this.userPhone=userPhone;
         this.userImage=userImage;
         this.userLat=userLat;
         this.userLng=userLng;
@@ -141,5 +143,13 @@ public class RequestInfo {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
 }

@@ -182,8 +182,8 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                 .child(userId).child(FirebaseRoot.DB_REQUEST_STATUS).setValue(RequestStatus.WAITING);
         // create request info object to save
         RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setUserInfo(userId, SharedPref.getUserName(this),SharedPref.getUserImage(this)
-                ,Double.parseDouble(SharedPref.getUserLat(this)),Double.parseDouble(SharedPref.getUserLng(this)));
+        requestInfo.setUserInfo(userId, SharedPref.getUserName(this),SharedPref.getPhone(this)
+                ,SharedPref.getUserImage(this),Double.parseDouble(SharedPref.getUserLat(this)),Double.parseDouble(SharedPref.getUserLng(this)));
         // save request info in driver (pending requests root)
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
                 .child(driverId).child(FirebaseRoot.DB_PENDING_REQUEST).child(requestId)
