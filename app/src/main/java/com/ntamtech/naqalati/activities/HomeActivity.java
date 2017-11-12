@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
@@ -31,13 +30,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ntamtech.naqalati.R;
 import com.ntamtech.naqalati.helper.Utils;
+import com.ntamtech.naqalati.helper.Constant;
 import com.ntamtech.naqalati.model.Driver;
 import com.ntamtech.naqalati.model.FirebaseRoot;
 import com.ntamtech.naqalati.model.User;
@@ -211,6 +210,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap=googleMap;
+        this.googleMap.setOnMarkerClickListener(this);
     }
     private void setLocation(){
         if(googleMap==null)
@@ -295,6 +295,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     private void addMeOnMap() {
         if(userMarker!=null)
             userMarker.remove();
+        if(currentLng==0.0 &&currentLat==0.0)
+            return;
         LatLng person = new LatLng(currentLat,currentLng);
         MarkerOptions markerOptions =new MarkerOptions().position(person);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.person_marker));
@@ -308,8 +310,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if(!marker.getSnippet().isEmpty()){
-
+        if(marker.getSnippet()!=null){
+            // send driver id to show info activity
+            Intent intent=new Intent(HomeActivity.this,ShowDriverInfoActivity.class);
+            intent.putExtra(Constant.SHOW_DRIVER_INFO,marker.getSnippet());
+            startActivity(intent);
         }
         return false;
     }

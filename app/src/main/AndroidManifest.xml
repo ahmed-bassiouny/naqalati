@@ -43,7 +43,7 @@
             android:value="a07905da1fb4c784f0369b04a71691297ca15843" />
 
         <activity android:name=".activities.ShowDriverInfoActivity"
-            android:theme="@android:style/Theme.Dialog"
+            android:theme="@style/myDialog"
             android:excludeFromRecents="true"></activity>
     </application>
 

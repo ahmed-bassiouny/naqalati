@@ -24,6 +24,8 @@
     <string name="car_number">رقم السيارة : </string>
     <string name="car_type">نوع السيارة : </string>
     <string name="driver_phone">رقم تليفون السائق : </string>
+    <string name="request_driver">طلب السائق </string>
+    <string name="cancel_request">الغاء الطلب </string>
     <!-- general-->
     <string name="check_internet">من فضلك تاكد من اتصالك بالانترنت</string>
     <string name="enter_phone">من فضلك ادخل رقم تليفون صحيح </string>

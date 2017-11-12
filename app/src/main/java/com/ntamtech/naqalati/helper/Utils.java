@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.widget.ImageView;
 
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeErrorDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeWarningDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
+import com.bumptech.glide.Glide;
 import com.ntamtech.naqalati.R;
 import com.ntamtech.naqalati.activities.SigninActivity;
 
@@ -70,5 +72,10 @@ public class Utils {
                 })
                 .show();
     }
+    public static void showImage(Context context, String url, ImageView imageView){
+        Glide.with(context).load(url)
+                .into(imageView);
+    }
+
 
 }
