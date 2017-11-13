@@ -350,6 +350,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         requestInfo.setDriverImage(driver.getUserAvatar());
         requestInfo.setUserId(userId);
         requestInfo.setDriverId(driverId);
+        requestInfo.setRequestStatus(RequestStatus.RUNNING);
         requestInfo.setCarNumber(driver.getCarNumber());
         requestInfo.setCarType(driver.getCarType());
         // generate key for request
