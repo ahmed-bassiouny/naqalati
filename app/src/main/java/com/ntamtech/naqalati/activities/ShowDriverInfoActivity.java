@@ -68,6 +68,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
     private PlaceAutocompleteFragment fragmentEndPoint;
     private RequestInfo requestInfo ;
     private CheckBox chSelectMyLocation;
+    Driver driver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +87,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                 .child(driverId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Driver driver = dataSnapshot.getValue(Driver.class);
+                 driver = dataSnapshot.getValue(Driver.class);
                 if(driver!=null){
                     tvDriverName.setText(driver.getUserName());
                     tvDriverPhone.setText(driver.getUserPhone());
@@ -305,6 +306,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                     RequestStatus requestStatus = dataSnapshot.getValue(RequestStatus.class);
                     if(requestStatus==RequestStatus.ACCEPT){
                         Toast.makeText(ShowDriverInfoActivity.this, R.string.request_accept, Toast.LENGTH_LONG).show();
+                        CreateRealRequest();
                         finish();
                     }else if (requestStatus==RequestStatus.REFUSE) {
                         Toast.makeText(ShowDriverInfoActivity.this, R.string.request_refuse, Toast.LENGTH_LONG).show();
@@ -335,10 +337,32 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         removeRequestStatueListener();
     }
     private String createFullAddress(Address objAddress){
-        String address = objAddress.getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+        String address = objAddress.getAddressLine(0);
         String city = objAddress.getLocality();
         String state = objAddress.getAdminArea();
         String fullAddress = address+" "+state +" "+ city;
         return fullAddress.replace("null","");
+    }
+    private void CreateRealRequest(){
+        // Complete required attribte in request info object
+        requestInfo.setDriverName(driver.getUserName());
+        requestInfo.setDriverPhone(driver.getUserPhone());
+        requestInfo.setDriverImage(driver.getUserAvatar());
+        requestInfo.setUserId(userId);
+        requestInfo.setDriverId(driverId);
+        requestInfo.setCarNumber(driver.getCarNumber());
+        requestInfo.setCarType(driver.getCarType());
+        // generate key for request
+        String key =FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS).push().getKey();
+        // update currentRequest in driver
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
+                .child(driverId).child(FirebaseRoot.DB_CURRENT_REQUEST)
+                .setValue(key);
+        // update currentRequest in driver
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
+                .child(userId).child(FirebaseRoot.DB_CURRENT_REQUEST)
+                .setValue(key);
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS).child(key)
+                .setValue(requestInfo);
     }
 }

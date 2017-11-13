@@ -80,12 +80,14 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                 User user = dataSnapshot.getValue(User.class);
                 if(user!=null){
                     SharedPref.setInfoUser(HomeActivity.this,user.getUserName(),user.getUserPhone(),user.getUserAvatar());
+                    SharedPref.setLocationUser(HomeActivity.this,user.getLat(),user.getLng());
                     if(user.getCurrentRequest().isEmpty()){
                         haveRequest=false;
                         startTime();
                     }else {
                         // TODO download request
                         haveRequest=true;
+                        Toast.makeText(HomeActivity.this, "i have request", Toast.LENGTH_SHORT).show();
                     }
                 }else {
                     Utils.ContactSuppot(HomeActivity.this);
@@ -304,7 +306,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     private void addMeOnMap() {
         if(userMarker!=null)
             userMarker.remove();
-        if(currentLng==0.0 &&currentLat==0.0)
+        if(currentLng==0.0 || currentLat==0.0)
             return;
         LatLng person = new LatLng(currentLat,currentLng);
         MarkerOptions markerOptions =new MarkerOptions().position(person);

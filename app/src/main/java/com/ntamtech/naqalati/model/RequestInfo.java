@@ -16,9 +16,10 @@ public class RequestInfo {
     private String driverId;
     private String driverName;
     private String driverImage;
+    private String driverPhone;
     /*private Double driverLng;
     private Double driverLat;*/
-    private String carType;
+    private CarType carType;
     private String carNumber;
     // request info
     private RequestStatus requestStatus;
@@ -115,11 +116,11 @@ public class RequestInfo {
     }
 */
 
-    public String getCarType() {
+    public CarType getCarType() {
         return carType;
     }
 
-    public void setCarType(String carType) {
+    public void setCarType(CarType carType) {
         this.carType = carType;
     }
 
@@ -169,5 +170,13 @@ public class RequestInfo {
 
     public void setEndPoint(Point endPoint) {
         this.endPoint = endPoint;
+    }
+
+    public String getDriverPhone() {
+        return driverPhone;
+    }
+
+    public void setDriverPhone(String driverPhone) {
+        this.driverPhone = driverPhone;
     }
 }
