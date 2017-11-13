@@ -19,6 +19,7 @@
         android:src="@drawable/ic_signout"
         android:layout_margin="10dp"
         android:id="@+id/signout"
+        android:layout_alignParentLeft="true"
         android:background="@drawable/border_edit_text"/>
     <ProgressBar
         android:layout_width="wrap_content"

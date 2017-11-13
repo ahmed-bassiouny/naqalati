@@ -1,17 +1,26 @@
 package com.ntamtech.naqalati.activities;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,8 +35,13 @@ import com.ntamtech.naqalati.model.CarType;
 import com.ntamtech.naqalati.helper.Constant;
 import com.ntamtech.naqalati.model.Driver;
 import com.ntamtech.naqalati.model.FirebaseRoot;
+import com.ntamtech.naqalati.model.Point;
 import com.ntamtech.naqalati.model.RequestInfo;
 import com.ntamtech.naqalati.model.RequestStatus;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -49,7 +63,11 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
     private ProgressBar progressInfo;
     private Button btnRequestDriver;
     private ImageView imgClose;
-    ValueEventListener requestStatueListener;
+    private ValueEventListener requestStatueListener;
+    private PlaceAutocompleteFragment fragmentStartPoint;
+    private PlaceAutocompleteFragment fragmentEndPoint;
+    private RequestInfo requestInfo ;
+    private CheckBox chSelectMyLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +75,9 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_show_driver_info);
         findViewById();
+        initObjects();
         onClick();
         getDriverId();
-        initObjects();
         loadData();
     }
 
@@ -114,6 +132,13 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                     containerSubInfo.setVisibility(View.INVISIBLE);
                 }else {
                     // make request
+                    if(requestInfo.getStartPoint()==null){
+                        Toast.makeText(ShowDriverInfoActivity.this, getString(R.string.start_point), Toast.LENGTH_SHORT).show();
+                        return;
+                    }else if(requestInfo.getEndPoint()==null){
+                        Toast.makeText(ShowDriverInfoActivity.this, getString(R.string.end_point), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     createRequest();
                     imgClose.setVisibility(View.INVISIBLE);
                     haveRequest=true;
@@ -126,6 +151,61 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        fragmentStartPoint.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Point point = new Point();
+                point.setLat(place.getLatLng().latitude);
+                point.setLng(place.getLatLng().longitude);
+                point.setLocationString(place.getAddress().toString());
+                requestInfo.setStartPoint(point);
+            }
+
+            @Override
+            public void onError(Status status) {
+
+            }
+        });
+        fragmentEndPoint.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Point point = new Point();
+                point.setLat(place.getLatLng().latitude);
+                point.setLng(place.getLatLng().longitude);
+                point.setLocationString(place.getAddress().toString());
+                requestInfo.setEndPoint(point);
+            }
+
+            @Override
+            public void onError(Status status) {
+            }
+        });
+        chSelectMyLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    fragmentStartPoint.setText("");
+                    Point point = new Point();
+                    Double lat = Double.parseDouble(SharedPref.getUserLat(ShowDriverInfoActivity.this));
+                    Double lng = Double.parseDouble(SharedPref.getUserLng(ShowDriverInfoActivity.this));
+                    point.setLat(lat);
+                    point.setLng(lng);
+                    Geocoder geocoder = new Geocoder(ShowDriverInfoActivity.this);
+                    List<Address> addresses = null;
+                    try {
+                        addresses = geocoder.getFromLocation(lat, lng, 1);
+                        point.setLocationString(createFullAddress(addresses.get(0)));
+                    } catch (IOException e) {
+                        point.setLocationString("");
+                    }
+                    requestInfo.setStartPoint(point);
+                }else {
+                    requestInfo.setStartPoint(null);
+                }
             }
         });
     }
@@ -144,6 +224,13 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
             finish();
         }
         userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        requestInfo = new RequestInfo();
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                .setCountry("EG")
+                .build();
+
+        fragmentStartPoint.setFilter(typeFilter);
+        fragmentEndPoint.setFilter(typeFilter);
     }
 
     private void findViewById() {
@@ -159,6 +246,11 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         tvWaiting = findViewById(R.id.tv_waiting);
         progressInfo = findViewById(R.id.progress_info);
         imgClose = findViewById(R.id.img_close);
+        fragmentStartPoint = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.fragment_start_point);
+        fragmentEndPoint = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.fragment_end_point);
+        chSelectMyLocation=findViewById(R.id.ch_select_myLocation);
     }
     private String getCarTypeString(CarType carType){
         String result="";
@@ -181,9 +273,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(userId).child(FirebaseRoot.DB_REQUEST_STATUS).setValue(RequestStatus.WAITING);
         // create request info object to save
-        RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setUserInfo(userId, SharedPref.getUserName(this),SharedPref.getPhone(this)
-                ,SharedPref.getUserImage(this),Double.parseDouble(SharedPref.getUserLat(this)),Double.parseDouble(SharedPref.getUserLng(this)));
+        requestInfo.setUserInfo(userId, SharedPref.getUserName(this),SharedPref.getPhone(this),SharedPref.getUserImage(this));
         // save request info in driver (pending requests root)
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
                 .child(driverId).child(FirebaseRoot.DB_PENDING_REQUEST).child(requestId)
@@ -243,5 +333,12 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(userId).child(FirebaseRoot.DB_REQUEST_STATUS).setValue(RequestStatus.NO_REQUEST);
         removeRequestStatueListener();
+    }
+    private String createFullAddress(Address objAddress){
+        String address = objAddress.getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+        String city = objAddress.getLocality();
+        String state = objAddress.getAdminArea();
+        String fullAddress = address+" "+state +" "+ city;
+        return fullAddress.replace("null","");
     }
 }
