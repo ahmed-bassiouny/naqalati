@@ -88,6 +88,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                     SharedPref.setLocationUser(HomeActivity.this,user.getLat(),user.getLng());
                     if(user.getCurrentRequest().isEmpty()){
                         haveRequest=false;
+                        currentLat=user.getLat();
+                        currentLng=user.getLng();
+                        setLocation();
                         startTime();
                     }else {
                         // TODO download request
