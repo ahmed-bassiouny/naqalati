@@ -6,15 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -22,6 +22,11 @@ import android.widget.Toast;
 
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,6 +41,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ntamtech.naqalati.R;
+import com.ntamtech.naqalati.helper.LocationManager;
 import com.ntamtech.naqalati.helper.SharedPref;
 import com.ntamtech.naqalati.helper.Utils;
 import com.ntamtech.naqalati.helper.Constant;
@@ -47,23 +53,24 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity implements LocationListener
-        ,OnMapReadyCallback,GoogleMap.OnMarkerClickListener{
+        , OnMapReadyCallback, GoogleMap.OnMarkerClickListener{
 
     SupportMapFragment mapFragment;
     LocationManager locationManager;
+
     ImageView signout;
     ProgressBar progress; // this progress to load all data first time
     // local variable
-    private final int requestLocationPermission =123;
+    private final int requestLocationPermission = 123;
     private final int showDriver = 124;
-    private double currentLat=0.0;
-    private double currentLng=0.0;
-    private boolean zoomOnMap =true; // to make zoom first time on map
+    private double currentLat = 0.0;
+    private double currentLng = 0.0;
+    private boolean zoomOnMap = true; // to make zoom first time on map
     // have request if true this mean i maked request so marker don't clickable
-    private boolean haveRequest=true;
+    private boolean haveRequest = true;
     private GoogleMap googleMap;
     private Marker userMarker;
-    private String myId="";
+    private String myId = "";
     private Timer timerDrivers;
 
 
@@ -74,8 +81,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         findViewById();
         initObjects();
         onClick();
-        zoomOnMap=true;
-        initLocationListener();
         getInfoFromDB();
     }
 
@@ -84,20 +89,17 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                if(user!=null){
-                    SharedPref.setLocationUser(HomeActivity.this,user.getLat(),user.getLng());
-                    if(user.getCurrentRequest().isEmpty()){
-                        haveRequest=false;
-                        currentLat=user.getLat();
-                        currentLng=user.getLng();
-                        setLocation();
+                if (user != null) {
+                    SharedPref.setLocationUser(HomeActivity.this, user.getLat(), user.getLng());
+                    if (user.getCurrentRequest().isEmpty()) {
+                        haveRequest = false;
                         startTime();
-                    }else {
+                    } else {
                         // TODO download request
-                        haveRequest=true;
+                        haveRequest = true;
                         Toast.makeText(HomeActivity.this, "i have request", Toast.LENGTH_SHORT).show();
                     }
-                }else {
+                } else {
                     Utils.ContactSuppot(HomeActivity.this);
                 }
                 progress.setVisibility(View.GONE);
@@ -131,7 +133,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                             @Override
                             public void exec() {
                                 FirebaseAuth.getInstance().signOut();
-                                startActivity(new Intent(HomeActivity.this,SigninActivity.class));
+                                startActivity(new Intent(HomeActivity.this, SigninActivity.class));
                                 finish();
                             }
                         })
@@ -145,49 +147,181 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         });
     }
 
-    private void initLocationListener() {
+    private void initObjects() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,5000,0, this);
-            locationManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER,3000,0, this);
-        }else {
+            locationManager=new LocationManager(this,this);
+        } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestLocationPermission);
         }
-    }
-
-    private void initObjects() {
         mapFragment.getMapAsync(this);
-        locationManager=(LocationManager) getSystemService(Context.LOCATION_SERVICE);
         setMyId();
     }
 
     private void findViewById() {
-        mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
-        signout=findViewById(R.id.signout);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        signout = findViewById(R.id.signout);
         progress = findViewById(R.id.progress);
-
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode== requestLocationPermission &&grantResults[0]==PackageManager.PERMISSION_DENIED) {
+        if (requestCode == requestLocationPermission && grantResults[0] == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestLocationPermission);
+        }else if (requestCode == requestLocationPermission && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            locationManager=new LocationManager(this,this);
         }
     }
 
-    public void showSettingsAlert(){
+    public void showSettingsAlert() {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(getString(R.string.open_gps));
         alertDialog.setCancelable(false);
 
         alertDialog.setPositiveButton(getString(R.string.setting), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-                    dialog.dismiss();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+                dialog.dismiss();
             }
         });
         alertDialog.show();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        this.googleMap.setOnMarkerClickListener(this);
+    }
+
+    private void setLocation() {
+        if (googleMap == null)
+            return;
+        addMeOnMap();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!Utils.isGpsEnable(this)) {
+            showSettingsAlert();
+        }else {
+            locationManager.addListener();
+        }
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopTimer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationManager.removeListener(this);
+    }
+
+    private void setMyId() {
+        if (myId.isEmpty() && FirebaseAuth.getInstance().getCurrentUser() != null) {
+            myId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        } else {
+            Utils.ContactSuppot(this);
+        }
+    }
+
+    private void startTime() {
+        if (timerDrivers == null) {
+            timerDrivers = new Timer();
+        }
+        timerDrivers.scheduleAtFixedRate(getAllDriverByTimer(), 1000, 5000);
+    }
+
+    private void stopTimer() {
+        if (timerDrivers != null) {
+            timerDrivers.cancel();
+            timerDrivers = null;
+        }
+    }
+
+    private TimerTask getAllDriverByTimer() {
+        return new TimerTask() {
+
+            @Override
+            public void run() {
+                getAllDriver();
+            }
+        };
+    }
+
+    private void getAllDriver() {
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Driver driver = snapshot.getValue(Driver.class);
+                        if (driver.getCurrentRequest().isEmpty())
+                            addDriverOnMap(snapshot.getKey(), driver.getLat(), driver.getLng());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void addDriverOnMap(String driverId, Double lat, Double lng) {
+        if (lat > 0 && lng > 0) {
+            LatLng person = new LatLng(lat, lng);
+            MarkerOptions markerOptions = new MarkerOptions().position(person);
+            markerOptions.snippet(driverId);
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker));
+            googleMap.addMarker(markerOptions);
+        }
+    }
+
+    private void addMeOnMap() {
+        if (userMarker != null)
+            userMarker.remove();
+        if (currentLng == 0.0 || currentLat == 0.0)
+            return;
+        LatLng person = new LatLng(currentLat, currentLng);
+        MarkerOptions markerOptions = new MarkerOptions().position(person);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.person_marker));
+        userMarker = googleMap.addMarker(markerOptions);
+        if (zoomOnMap) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(person));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerOptions.getPosition(), 15), 1000, null);
+            zoomOnMap = false;
+        }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (!haveRequest && marker.getSnippet() != null) {
+            // send driver id to show info activity
+            Intent intent = new Intent(HomeActivity.this, ShowDriverInfoActivity.class);
+            intent.putExtra(Constant.SHOW_DRIVER_INFO, marker.getSnippet());
+            startActivityForResult(intent, showDriver);
+        }
+        return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == showDriver) {
+            // this mean i make request and driver accept it
+            if (googleMap != null)
+                googleMap.clear();
+            addMeOnMap();
+            getInfoFromDB();
+        }
     }
 
     @Override
@@ -201,141 +335,37 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                 .child(myId)
                 .child(FirebaseRoot.DB_LNG)
                 .setValue(location.getLongitude());
-        currentLat=location.getLatitude();
-        currentLng=location.getLongitude();
+        currentLat = location.getLatitude();
+        currentLng = location.getLongitude();
         setLocation();
-        SharedPref.setLocationUser(HomeActivity.this,currentLat,currentLng);
+        SharedPref.setLocationUser(HomeActivity.this, currentLat, currentLng);
+    }
+
+  /*  private void buildGoogleApiClient(Context context) {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(context)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @SuppressWarnings("MissingPermission")
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        LocationRequest request = new LocationRequest().setNumUpdates(1000).setInterval(10000);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, request, HomeActivity.this);
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    public void onConnectionSuspended(int i) {
 
     }
 
     @Override
-    public void onProviderEnabled(String provider) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-          if(provider.equals(LocationManager.GPS_PROVIDER)){
-            showSettingsAlert();
-        }
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.googleMap=googleMap;
-        this.googleMap.setOnMarkerClickListener(this);
-    }
-    private void setLocation(){
-        if(googleMap==null)
-            return;
-        addMeOnMap();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        locationManager.removeUpdates(this);
-        stopTimer();
-    }
-    private void setMyId(){
-        if(myId.isEmpty() && FirebaseAuth.getInstance().getCurrentUser()!=null){
-            myId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        }else {
-            Utils.ContactSuppot(this);
-        }
-    }
-
-    private void startTime() {
-        if(timerDrivers == null) {
-            timerDrivers = new Timer();
-        }
-        timerDrivers.scheduleAtFixedRate(getAllDriverByTimer(), 1000, 5000);
-    }
-    private void stopTimer(){
-        if(timerDrivers!=null) {
-            timerDrivers.cancel();
-            timerDrivers=null;
-        }
-    }
-
-    private TimerTask getAllDriverByTimer(){
-        return new TimerTask() {
-
-            @Override
-            public void run() {
-                getAllDriver();
-            }
-        };
-    }
-    private void getAllDriver(){
-        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot!=null){
-                    for (DataSnapshot snapshot:dataSnapshot.getChildren()){
-                        Driver driver = snapshot.getValue(Driver.class);
-                        if(driver.getCurrentRequest().isEmpty())
-                            addDriverOnMap(snapshot.getKey(),driver.getLat(),driver.getLng());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-    private void addDriverOnMap(String driverId,Double lat,Double lng){
-        if(lat>0 &&lng>0) {
-            LatLng person = new LatLng(lat, lng);
-            MarkerOptions markerOptions = new MarkerOptions().position(person);
-            markerOptions.snippet(driverId);
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker));
-            googleMap.addMarker(markerOptions);
-        }
-    }
-
-    private void addMeOnMap() {
-        if(userMarker!=null)
-            userMarker.remove();
-        if(currentLng==0.0 || currentLat==0.0)
-            return;
-        LatLng person = new LatLng(currentLat,currentLng);
-        MarkerOptions markerOptions =new MarkerOptions().position(person);
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.person_marker));
-        userMarker= googleMap.addMarker(markerOptions);
-        if(zoomOnMap) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(person));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerOptions.getPosition(), 15), 1000, null);
-            zoomOnMap=false;
-        }
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        if(!haveRequest&&marker.getSnippet()!=null){
-            // send driver id to show info activity
-            Intent intent=new Intent(HomeActivity.this,ShowDriverInfoActivity.class);
-            intent.putExtra(Constant.SHOW_DRIVER_INFO,marker.getSnippet());
-            startActivityForResult(intent,showDriver);
-        }
-        return false;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK && requestCode==showDriver){
-            // this mean i make request and driver accept it
-            if(googleMap!=null)
-                googleMap.clear();
-            addMeOnMap();
-            getInfoFromDB();
-        }
-    }
+    }*/
 }

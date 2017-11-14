@@ -78,6 +78,10 @@ public class Utils {
         Glide.with(context).load(url)
                 .into(imageView);
     }
+    public static boolean isGpsEnable(Context context){
+        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
 
 
 }
