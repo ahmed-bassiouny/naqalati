@@ -1,5 +1,6 @@
 package com.ntamtech.naqalati.activities;
 
+import android.app.Activity;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.annotation.NonNull;
@@ -307,6 +308,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                     if(requestStatus==RequestStatus.ACCEPT){
                         Toast.makeText(ShowDriverInfoActivity.this, R.string.request_accept, Toast.LENGTH_LONG).show();
                         CreateRealRequest();
+                        setResult(Activity.RESULT_OK);
                         finish();
                     }else if (requestStatus==RequestStatus.REFUSE) {
                         Toast.makeText(ShowDriverInfoActivity.this, R.string.request_refuse, Toast.LENGTH_LONG).show();

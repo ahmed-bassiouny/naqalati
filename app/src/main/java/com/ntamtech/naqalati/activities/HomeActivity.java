@@ -55,6 +55,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     ProgressBar progress; // this progress to load all data first time
     // local variable
     private final int requestLocationPermission =123;
+    private final int showDriver = 124;
     private double currentLat=0.0;
     private double currentLng=0.0;
     private boolean zoomOnMap =true; // to make zoom first time on map
@@ -64,6 +65,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     private Marker userMarker;
     private String myId="";
     private Timer timerDrivers;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +74,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         findViewById();
         initObjects();
         onClick();
+        zoomOnMap=true;
+        initLocationListener();
+        getInfoFromDB();
     }
 
     private void getInfoFromDB() {
@@ -79,7 +85,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if(user!=null){
-                    SharedPref.setInfoUser(HomeActivity.this,user.getUserName(),user.getUserPhone(),user.getUserAvatar());
                     SharedPref.setLocationUser(HomeActivity.this,user.getLat(),user.getLng());
                     if(user.getCurrentRequest().isEmpty()){
                         haveRequest=false;
@@ -226,15 +231,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             return;
         addMeOnMap();
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(googleMap!=null)
-            googleMap.clear();
-        zoomOnMap=true;
-        getInfoFromDB();
-        initLocationListener();
-    }
 
     @Override
     protected void onStop() {
@@ -293,8 +289,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     }
     private void addDriverOnMap(String driverId,Double lat,Double lng){
         if(lat>0 &&lng>0) {
-            googleMap.clear();
-            addMeOnMap();
             LatLng person = new LatLng(lat, lng);
             MarkerOptions markerOptions = new MarkerOptions().position(person);
             markerOptions.snippet(driverId);
@@ -325,8 +319,20 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             // send driver id to show info activity
             Intent intent=new Intent(HomeActivity.this,ShowDriverInfoActivity.class);
             intent.putExtra(Constant.SHOW_DRIVER_INFO,marker.getSnippet());
-            startActivity(intent);
+            startActivityForResult(intent,showDriver);
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK && requestCode==showDriver){
+            // this mean i make request and driver accept it
+            if(googleMap!=null)
+                googleMap.clear();
+            addMeOnMap();
+            getInfoFromDB();
+        }
     }
 }

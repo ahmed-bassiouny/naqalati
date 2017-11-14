@@ -35,6 +35,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mvc.imagepicker.ImagePicker;
 import com.ntamtech.naqalati.R;
+import com.ntamtech.naqalati.helper.SharedPref;
 import com.ntamtech.naqalati.helper.Utils;
 import com.ntamtech.naqalati.model.FirebaseRoot;
 import com.ntamtech.naqalati.model.RequestStatus;
@@ -164,6 +165,10 @@ public class SignupActivity extends AppCompatActivity {
         user.setLng(0.0);
         user.setCurrentRequest("");
         user.setRequestStatus(RequestStatus.NO_REQUEST);
+        // save data in shared pref
+        SharedPref.setInfoUser(SignupActivity.this,user.getUserName(),user.getUserPhone(),
+                user.getUserAvatar());
+
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
