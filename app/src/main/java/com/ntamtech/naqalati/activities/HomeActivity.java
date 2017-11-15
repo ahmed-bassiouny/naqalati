@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -22,6 +23,10 @@ import android.widget.Toast;
 
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -35,6 +40,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,8 +54,10 @@ import com.ntamtech.naqalati.helper.Utils;
 import com.ntamtech.naqalati.helper.Constant;
 import com.ntamtech.naqalati.model.Driver;
 import com.ntamtech.naqalati.model.FirebaseRoot;
+import com.ntamtech.naqalati.model.RequestInfo;
 import com.ntamtech.naqalati.model.User;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -71,7 +80,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     private GoogleMap googleMap;
     private Marker userMarker;
     private String myId = "";
+    private String currentRequest="";
     private Timer timerDrivers;
+    ValueEventListener currentRequestListener;
 
 
     @Override
@@ -98,6 +109,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                         // TODO download request
                         haveRequest = true;
                         Toast.makeText(HomeActivity.this, "i have request", Toast.LENGTH_SHORT).show();
+                        currentRequest=user.getCurrentRequest();
+                        addListenerOnCurrentRequest();
                     }
                 } else {
                     Utils.ContactSuppot(HomeActivity.this);
@@ -215,6 +228,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     protected void onStop() {
         super.onStop();
         stopTimer();
+        removeListenerOnCurrentRequest();
     }
 
     @Override
@@ -340,4 +354,151 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         setLocation();
         SharedPref.setLocationUser(HomeActivity.this, currentLat, currentLng);
     }
+    private void addListenerOnCurrentRequest(){
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS)
+                .child(currentRequest).addValueEventListener(getListenerOnCurrentRequest());
+    }
+    private void removeListenerOnCurrentRequest(){
+        if(currentRequestListener!=null)
+            FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS)
+                    .child(currentRequest).removeEventListener(currentRequestListener);
+    }
+    private ValueEventListener getListenerOnCurrentRequest(){
+        currentRequestListener= new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                RequestInfo requestInfo = dataSnapshot.getValue(RequestInfo.class);
+             /*   if(requestInfo.getRequestStatus()== RequestStatus.DRIVER_GO_TO_START_POINT) {
+                    progress.setVisibility(View.VISIBLE);
+                    Toast.makeText(HomeActivity.this,R.string.waiting, Toast.LENGTH_SHORT).show();
+                    container.setVisibility(View.VISIBLE);
+                    setUserInfo(requestInfo);
+                    googleMap.clear();
+                    setLocation();
+                    final LatLng driverLocation = new LatLng(requestInfo.getDriverLat(),requestInfo.getDriverLng());
+                    final LatLng startPointLocation = new LatLng(requestInfo.getStartPoint().getLat(),requestInfo.getStartPoint().getLng());
+                    Routing routing = new Routing.Builder()
+                            .travelMode(Routing.TravelMode.DRIVING)
+                            .waypoints(driverLocation,startPointLocation)
+                            .withListener(new RoutingListener() {
+                                @Override
+                                public void onRoutingFailure(RouteException e) {
+
+                                }
+
+                                @Override
+                                public void onRoutingStart() {
+
+                                }
+
+                                @Override
+                                public void onRoutingSuccess(ArrayList<Route> arrayList, int shortestRouteIndex) {
+                                    ArrayList polylines =new ArrayList<>();
+                                    String totalTime="";
+                                    //add route(s) to the map.
+                                    for (int i = 0; i <arrayList.size(); i++) {
+                                        totalTime = arrayList.get(i).getDurationText();
+                                        PolylineOptions polyOptions = new PolylineOptions();
+                                        polyOptions.color(Color.BLUE);
+                                        polyOptions.width(10 + i * 3);
+                                        polyOptions.addAll(arrayList.get(i).getPoints());
+                                        Polyline polyline = googleMap.addPolyline(polyOptions);
+                                        polylines.add(polyline);
+                                    }
+
+                                    // Start marker
+                                    MarkerOptions options = new MarkerOptions();
+                                    options.position(driverLocation);
+                                    googleMap.addMarker(options);
+
+                                    // End marker
+                                    options = new MarkerOptions();
+                                    options.position(startPointLocation);
+                                    googleMap.addMarker(options);
+                                    tvTime.setText(convertTimeToArabic(totalTime));
+                                    progress.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onRoutingCancelled() {
+
+                                }
+                            })
+                            .build();
+                    routing.execute();
+                }else if(requestInfo.getRequestStatus()== RequestStatus.DRIVER_GO_TO_END_POINT) {
+                    progress.setVisibility(View.VISIBLE);
+                    Toast.makeText(HomeActivity.this,R.string.waiting, Toast.LENGTH_SHORT).show();
+                    setUserInfo(requestInfo);
+                    container.setVisibility(View.VISIBLE);
+                    btnArrived.setVisibility(View.INVISIBLE);
+                    googleMap.clear();
+                    setLocation();
+                    final LatLng startPointLocation = new LatLng(requestInfo.getStartPoint().getLat(),requestInfo.getStartPoint().getLng());
+                    final LatLng endPointLocation = new LatLng(requestInfo.getEndPoint().getLat(),requestInfo.getEndPoint().getLng());
+                    Routing routing = new Routing.Builder()
+                            .travelMode(Routing.TravelMode.DRIVING)
+                            .waypoints(startPointLocation,endPointLocation)
+                            .withListener(new RoutingListener() {
+                                @Override
+                                public void onRoutingFailure(RouteException e) {
+
+                                }
+
+                                @Override
+                                public void onRoutingStart() {
+                                }
+
+                                @Override
+                                public void onRoutingSuccess(ArrayList<Route> arrayList, int shortestRouteIndex) {
+                                    ArrayList polylines =new ArrayList<>();
+                                    String totalTime="";
+                                    //add route(s) to the map.
+                                    for (int i = 0; i <arrayList.size(); i++) {
+                                        totalTime = arrayList.get(i).getDurationText();
+                                        PolylineOptions polyOptions = new PolylineOptions();
+                                        polyOptions.color(Color.BLUE);
+                                        polyOptions.width(10 + i * 3);
+                                        polyOptions.addAll(arrayList.get(i).getPoints());
+                                        Polyline polyline = googleMap.addPolyline(polyOptions);
+                                        polylines.add(polyline);
+                                    }
+
+                                    // Start marker
+                                    MarkerOptions options = new MarkerOptions();
+                                    options.position(startPointLocation);
+                                    googleMap.addMarker(options);
+
+                                    // End marker
+                                    options = new MarkerOptions();
+                                    options.position(endPointLocation);
+                                    googleMap.addMarker(options);
+                                    tvTime.setText(convertTimeToArabic(totalTime));
+                                    progress.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onRoutingCancelled() {
+
+                                }
+                            })
+                            .build();
+                    routing.execute();
+                }else {
+                    googleMap.clear();
+                    container.setVisibility(View.GONE);
+                    progress.setVisibility(View.GONE);
+                    removeListenerOnCurrentRequest();
+                    removeCurrentRequest();
+                }*/
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                progress.setVisibility(View.GONE);
+            }
+        };
+        return currentRequestListener;
+    }
+
 }
