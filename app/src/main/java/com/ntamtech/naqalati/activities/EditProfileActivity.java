@@ -107,6 +107,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 .child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progress.setVisibility(View.GONE);
                 if(dataSnapshot==null)
                     finish();
                 User user=dataSnapshot.getValue(User.class);
@@ -130,7 +131,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         }
         progress.setVisibility(View.VISIBLE);
         signout.setVisibility(View.INVISIBLE);
-        container.setVisibility(View.INVISIBLE);
+        findViewById(R.id.btn_edit).setVisibility(View.INVISIBLE);
         if(photoUri==null){
             // update name
             updateName();
