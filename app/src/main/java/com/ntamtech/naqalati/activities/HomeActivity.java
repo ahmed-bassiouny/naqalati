@@ -340,32 +340,4 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         setLocation();
         SharedPref.setLocationUser(HomeActivity.this, currentLat, currentLng);
     }
-
-  /*  private void buildGoogleApiClient(Context context) {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(context)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-            mGoogleApiClient.connect();
-        }
-    }
-
-    @SuppressWarnings("MissingPermission")
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        LocationRequest request = new LocationRequest().setNumUpdates(1000).setInterval(10000);
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, request, HomeActivity.this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }*/
 }

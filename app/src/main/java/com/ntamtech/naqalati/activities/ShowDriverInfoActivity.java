@@ -275,7 +275,8 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(userId).child(FirebaseRoot.DB_REQUEST_STATUS).setValue(RequestStatus.WAITING);
         // create request info object to save
-        requestInfo.setUserInfo(userId, SharedPref.getUserName(this),SharedPref.getPhone(this),SharedPref.getUserImage(this));
+        requestInfo.setUserInfo(userId, SharedPref.getUserName(this),SharedPref.getPhone(this),SharedPref.getUserImage(this)
+        ,Double.parseDouble(SharedPref.getUserLat(this)),Double.parseDouble(SharedPref.getUserLng(this)));
         // save request info in driver (pending requests root)
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
                 .child(driverId).child(FirebaseRoot.DB_PENDING_REQUEST).child(requestId)
@@ -352,7 +353,9 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         requestInfo.setDriverImage(driver.getUserAvatar());
         requestInfo.setUserId(userId);
         requestInfo.setDriverId(driverId);
-        requestInfo.setRequestStatus(RequestStatus.RUNNING);
+        requestInfo.setDriverLat(driver.getLat());
+        requestInfo.setDriverLng(driver.getLng());
+        requestInfo.setRequestStatus(RequestStatus.DRIVER_GO_TO_START_POINT);
         requestInfo.setCarNumber(driver.getCarNumber());
         requestInfo.setCarType(driver.getCarType());
         // generate key for request

@@ -10,15 +10,15 @@ public class RequestInfo {
     private String userName;
     private String userPhone;
     private String userImage;
-/*    private Double userLat;
-    private Double userLng;*/
+    private Double userLat;
+    private Double userLng;
     // driver
     private String driverId;
     private String driverName;
     private String driverImage;
     private String driverPhone;
-    /*private Double driverLng;
-    private Double driverLat;*/
+    private Double driverLng;
+    private Double driverLat;
     private CarType carType;
     private String carNumber;
     // request info
@@ -27,11 +27,13 @@ public class RequestInfo {
     private Point startPoint;
     private Point endPoint;
 
-    public void setUserInfo(String userId,String userName ,String userPhone, String userImage ){
+    public void setUserInfo(String userId,String userName ,String userPhone, String userImage,Double userLat,Double userLng){
         this.userId=userId;
         this.userName=userName;
         this.userPhone=userPhone;
         this.userImage=userImage;
+        this.userLat=userLat;
+        this.userLng=userLng;
     }
 
     public String getUserId() {
@@ -58,7 +60,7 @@ public class RequestInfo {
         this.userImage = userImage;
     }
 
-/*    public Double getUserLat() {
+    public Double getUserLat() {
         return userLat;
     }
 
@@ -72,7 +74,7 @@ public class RequestInfo {
 
     public void setUserLng(Double userLng) {
         this.userLng = userLng;
-    }*/
+    }
 
     public String getDriverId() {
         return driverId;
@@ -98,7 +100,6 @@ public class RequestInfo {
         this.driverImage = driverImage;
     }
 
-/*
     public Double getDriverLng() {
         return driverLng;
     }
@@ -114,7 +115,6 @@ public class RequestInfo {
     public void setDriverLat(Double driverLat) {
         this.driverLat = driverLat;
     }
-*/
 
     public CarType getCarType() {
         return carType;
