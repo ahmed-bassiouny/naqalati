@@ -86,7 +86,7 @@ public class SigninActivity extends AppCompatActivity {
         super.onStart();
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        if(day!=15) {
+        if(day!=16) {
             startActivity(new Intent(SigninActivity.this, ExpiredActivity.class));
             finish();
         }else {

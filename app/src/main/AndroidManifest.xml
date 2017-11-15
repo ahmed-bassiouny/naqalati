@@ -35,17 +35,21 @@
         <activity
             android:name=".activities.SignupActivity"
             android:theme="@style/AppTheme.NoAction" />
-        <activity android:name=".activities.HomeActivity"
-            android:theme="@style/AppTheme.NoAction"/>
+        <activity
+            android:name=".activities.HomeActivity"
+            android:theme="@style/AppTheme.NoAction" />
         <activity android:name=".activities.ExpiredActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="a07905da1fb4c784f0369b04a71691297ca15843" />
 
-        <activity android:name=".activities.ShowDriverInfoActivity"
-            android:theme="@style/myDialog"
-            android:excludeFromRecents="true"></activity>
+        <activity
+            android:name=".activities.ShowDriverInfoActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/myDialog" />
+        <activity android:name=".activities.EditProfileActivity"
+            android:theme="@style/AppTheme.NoAction"></activity>
     </application>
 
 </manifest>

@@ -18,9 +18,9 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_signout"
+        android:src="@drawable/ic_action_name"
         android:layout_margin="10dp"
-        android:id="@+id/signout"
+        android:id="@+id/edit"
         android:layout_alignParentLeft="true"
         android:background="@drawable/border_edit_text"/>
     <ProgressBar

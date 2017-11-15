@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/client"
+    android:layoutDirection="rtl"
+    android:textDirection="rtl"
+    android:layout_height="match_parent"
+    tools:context="com.ntamtech.naqalati.activities.EditProfileActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/container"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/person"
+            app:civ_border_color="@color/red_logo"
+            app:civ_border_width="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:drawableStart="@drawable/ic_edit"
+            android:gravity="center"
+            android:id="@+id/tv_choose_image"
+            android:paddingBottom="30dp"
+            android:text="@string/choose_image"
+            android:textColor="@color/red_logo" />
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_edit_text"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_user"
+            android:hint="@string/user_name"
+            android:inputType="textPersonName"
+            android:lines="1"
+            android:id="@+id/et_user_name"
+            android:maxLines="1"
+            android:minHeight="30dp"
+            android:padding="5dp" />
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/border_button"
+            android:gravity="center"
+            android:id="@+id/btn_edit"
+            android:text="@string/edit"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/progress"/>
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/border_button_white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/signout"
+        android:text="@string/signout"
+        android:textColor="@color/red_logo"
+        android:textStyle="bold" />
+</RelativeLayout>

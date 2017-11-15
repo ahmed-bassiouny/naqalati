@@ -73,7 +73,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     SupportMapFragment mapFragment;
     LocationManager locationManager;
 
-    ImageView signout;
+    ImageView edit;
     ProgressBar progress; // this progress to load all data first time
     // local variable
     private final int requestLocationPermission = 123;
@@ -85,10 +85,12 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     private boolean haveRequest = true;
     private GoogleMap googleMap;
     private Marker userMarker;
+    private Marker myDriverMarker;
     private String myId = "";
     private String currentRequest = "";
     private Timer timerDrivers;
     ValueEventListener currentRequestListener;
+    ValueEventListener listenerOnMyDriver;
     private RelativeLayout container;
     private CircleImageView profileImage;
     private TextView tvDriverName;
@@ -96,6 +98,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     private TextView tvDriverCarNumber;
     private TextView tvTime;
     Button btnArrived, btnCancel;
+    private String myDriverId="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +117,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
                     // save data in shared pref
-                    SharedPref.setInfoUser(HomeActivity.this,user.getUserName(),user.getUserPhone(),
+                    SharedPref.setInfoUser(HomeActivity.this, user.getUserName(), user.getUserPhone(),
                             user.getUserAvatar());
                     if (user.getCurrentRequest().isEmpty()) {
                         haveRequest = false;
@@ -141,35 +144,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     }
 
     private void onClick() {
-        signout.setOnClickListener(new View.OnClickListener() {
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AwesomeInfoDialog(HomeActivity.this)
-                        .setTitle(R.string.app_name)
-                        .setMessage(R.string.you_want_signout)
-                        .setColoredCircle(R.color.dialogInfoBackgroundColor)
-                        .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
-                        .setCancelable(true)
-                        .setPositiveButtonText(getString(R.string.yes))
-                        .setPositiveButtonbackgroundColor(R.color.red_logo)
-                        .setPositiveButtonTextColor(R.color.white)
-                        .setNegativeButtonText(getString(R.string.no))
-                        .setNegativeButtonbackgroundColor(R.color.dialogInfoBackgroundColor)
-                        .setNegativeButtonTextColor(R.color.white)
-                        .setPositiveButtonClick(new Closure() {
-                            @Override
-                            public void exec() {
-                                FirebaseAuth.getInstance().signOut();
-                                startActivity(new Intent(HomeActivity.this, SigninActivity.class));
-                                finish();
-                            }
-                        })
-                        .setNegativeButtonClick(new Closure() {
-                            @Override
-                            public void exec() {
-                            }
-                        })
-                        .show();
+                startActivity(new Intent(HomeActivity.this,EditProfileActivity.class));
+                finish();
             }
         });
         btnArrived.setOnClickListener(new View.OnClickListener() {
@@ -202,7 +181,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
 
     private void findViewById() {
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        signout = findViewById(R.id.signout);
+        edit = findViewById(R.id.edit);
         progress = findViewById(R.id.progress);
         container = findViewById(R.id.container);
         profileImage = findViewById(R.id.profile_image);
@@ -210,8 +189,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         tvDriverPhone = findViewById(R.id.tv_driver_phone);
         tvDriverCarNumber = findViewById(R.id.tv_driver_car_number);
         tvTime = findViewById(R.id.tv_time);
-        btnArrived=findViewById(R.id.btn_arrived);
-        btnCancel=findViewById(R.id.btn_cancel);
+        btnArrived = findViewById(R.id.btn_arrived);
+        btnCancel = findViewById(R.id.btn_cancel);
     }
 
     @Override
@@ -258,7 +237,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             showSettingsAlert();
         } else {
             if (locationManager != null)
-            locationManager.addListener();
+                locationManager.addListener();
         }
     }
 
@@ -268,6 +247,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         super.onStop();
         stopTimer();
         removeListenerOnCurrentRequest();
+        removeMyDriverCar();
     }
 
     @Override
@@ -412,6 +392,10 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RequestInfo requestInfo = dataSnapshot.getValue(RequestInfo.class);
+                if(requestInfo==null)
+                    return;
+                myDriverId=requestInfo.getDriverId();
+                addMyDriverCar();
                 if (requestInfo.getRequestStatus() == RequestStatus.DRIVER_GO_TO_START_POINT) {
                     progress.setVisibility(View.VISIBLE);
                     Toast.makeText(HomeActivity.this, R.string.waiting, Toast.LENGTH_SHORT).show();
@@ -525,34 +509,37 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                             })
                             .build();
                     routing.execute();
-                } else if (requestInfo.getRequestStatus() == RequestStatus.CANCEL_FROM_DRIVER){
+                } else if (requestInfo.getRequestStatus() == RequestStatus.CANCEL_FROM_DRIVER) {
                     Toast.makeText(HomeActivity.this, R.string.driver_cancel, Toast.LENGTH_SHORT).show();
                     googleMap.clear();
-                    haveRequest=false;
+                    haveRequest = false;
                     container.setVisibility(View.GONE);
                     progress.setVisibility(View.GONE);
                     removeListenerOnCurrentRequest();
                     removeCurrentRequest();
+                    removeMyDriverCar();
                     setLocation();
                     startTime();
-                } else if (requestInfo.getRequestStatus() == RequestStatus.CANCEL_FROM_USER){
+                } else if (requestInfo.getRequestStatus() == RequestStatus.CANCEL_FROM_USER) {
                     Toast.makeText(HomeActivity.this, R.string.user_cancel, Toast.LENGTH_SHORT).show();
                     googleMap.clear();
-                    haveRequest=false;
+                    haveRequest = false;
                     container.setVisibility(View.GONE);
                     progress.setVisibility(View.GONE);
                     removeListenerOnCurrentRequest();
                     removeCurrentRequest();
+                    removeMyDriverCar();
                     setLocation();
                     startTime();
-                } else if (requestInfo.getRequestStatus() == RequestStatus.COMPLETE){
+                } else if (requestInfo.getRequestStatus() == RequestStatus.COMPLETE) {
                     Toast.makeText(HomeActivity.this, R.string.complete, Toast.LENGTH_SHORT).show();
                     googleMap.clear();
-                    haveRequest=false;
+                    haveRequest = false;
                     container.setVisibility(View.GONE);
                     progress.setVisibility(View.GONE);
                     removeListenerOnCurrentRequest();
                     removeCurrentRequest();
+                    removeMyDriverCar();
                     setLocation();
                     startTime();
                 }
@@ -582,6 +569,46 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(myId).child(FirebaseRoot.DB_CURRENT_REQUEST).setValue("");
         currentRequest = "";
+    }
+
+    private ValueEventListener getListenerOnMyDriver() {
+        if (listenerOnMyDriver == null)
+            listenerOnMyDriver = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Driver driver =dataSnapshot.getValue(Driver.class);
+                    if(driver==null)
+                        return;
+                    if(myDriverMarker!=null)
+                        myDriverMarker.remove();
+                    LatLng person = new LatLng(driver.getLat(), driver.getLng());
+                    MarkerOptions markerOptions = new MarkerOptions().position(person);
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker));
+                    myDriverMarker = googleMap.addMarker(markerOptions);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+        return listenerOnMyDriver;
+    }
+    private void addMyDriverCar(){
+        if(listenerOnMyDriver==null)
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
+                .child(myDriverId).addValueEventListener(getListenerOnMyDriver());
+    }
+    private void removeMyDriverCar(){
+        if(listenerOnMyDriver!=null) {
+            FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
+                    .child(myDriverId).removeEventListener(listenerOnMyDriver);
+            listenerOnMyDriver=null;
+        }
+        if(myDriverMarker!=null) {
+            myDriverMarker.remove();
+            myDriverMarker=null;
+        }
     }
 
 }
