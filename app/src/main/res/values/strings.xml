@@ -45,11 +45,16 @@
     <string name="contact_suppoty">حدث خطا ما برجاء التحدث مع الدعم</string>
     <string name="you_want_signout">هل تريد تسجيل الخروج ؟</string>
     <string name="google_maps_key">AIzaSyDyU5o83wUPIcZ2XCW2MaRMG3rD5j84pJA</string>
+    <string name="waiting">من فضلك انتظر يتم تحميل البيانات </string>
 
 
     <!--Home-->
     <string name="arrived">تم الوصول</string>
     <string name="cancel">الغاء العملية</string>
+
+    <string name="user_cancel">تم الغاء العملية من قبل المستخدم</string>
+    <string name="driver_cancel">تم الغاء العملية من قبل السائق</string>
+    <string name="complete">تم اكتمال العملية بنجاح</string>
 
 
 </resources>
