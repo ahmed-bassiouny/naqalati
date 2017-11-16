@@ -14,6 +14,8 @@ public class User {
     private Double lng;
     private String currentRequest;
     private RequestStatus requestStatus;
+    private String numberID;
+    private String address;
 
     public String getUserName() {
         return userName;
@@ -83,5 +85,25 @@ public class User {
 
     public void setRequestStatus(RequestStatus requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    public String getNumberID() {
+        if(numberID==null)
+            numberID="";
+        return numberID;
+    }
+
+    public void setNumberID(String numberID) {
+        this.numberID = numberID;
+    }
+
+    public String getAddress() {
+        if(address==null)
+            address="";
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

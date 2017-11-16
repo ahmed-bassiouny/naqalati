@@ -53,6 +53,34 @@
             android:maxLines="1"
             android:minHeight="30dp"
             android:padding="5dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_edit_text"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_id"
+            android:hint="رقم البطاقة"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:lines="1"
+            android:id="@+id/et_user_id"
+            android:maxLines="1"
+            android:minHeight="30dp"
+            android:padding="5dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_edit_text"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_home"
+            android:hint="عنوانك الشخصى"
+            android:lines="1"
+            android:id="@+id/et_user_address"
+            android:maxLines="1"
+            android:minHeight="30dp"
+            android:padding="5dp" />
 
         <Button
             android:layout_width="200dp"

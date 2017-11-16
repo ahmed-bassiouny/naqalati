@@ -5,24 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/client"
-    android:fillViewport="true"
     android:layoutDirection="rtl"
     android:textDirection="rtl"
+    android:fitsSystemWindows="true"
+    android:fillViewport="true"
     tools:context="com.ntamtech.naqalati.activities.SignupActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
         android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/person"
+            android:layout_marginTop="20dp"
             app:civ_border_color="@color/red_logo"
             app:civ_border_width="2dp" />
 
@@ -34,7 +34,8 @@
             android:drawableStart="@drawable/ic_edit"
             android:gravity="center"
             android:id="@+id/tv_choose_image"
-            android:paddingBottom="30dp"
+            android:paddingBottom="5dp"
+            android:textSize="20sp"
             android:text="@string/choose_image"
             android:textColor="@color/red_logo" />
 
@@ -101,11 +102,40 @@
             android:maxLines="1"
             android:minHeight="30dp"
             android:padding="5dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_edit_text"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_id"
+            android:hint="رقم البطاقة"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:lines="1"
+            android:id="@+id/et_user_id"
+            android:maxLines="1"
+            android:minHeight="30dp"
+            android:padding="5dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_edit_text"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_home"
+            android:hint="عنوانك الشخصى"
+            android:lines="1"
+            android:id="@+id/et_user_address"
+            android:maxLines="1"
+            android:minHeight="30dp"
+            android:padding="5dp" />
 
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:visibility="invisible" />
 
         <Button

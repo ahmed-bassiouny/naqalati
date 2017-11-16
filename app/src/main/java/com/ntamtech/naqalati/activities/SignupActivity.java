@@ -51,7 +51,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextView tvChooseImage;
     private ProgressBar progress;
     private Button btnRegister;
-    private EditText etPhone, etPassword, etConfirmPassword, etName;
+    private EditText etPhone, etPassword, etConfirmPassword, etName,etUserID,etUserAddress;
     private final int requestLocationPermission =123;
 
     private Uri photoUri;
@@ -84,6 +84,8 @@ public class SignupActivity extends AppCompatActivity {
                     etConfirmPassword.setError(getString(R.string.invalid_confirm_password));
                 } else if (etName.getText().toString().isEmpty()) {
                     etName.setError(getString(R.string.invalid_user_name));
+                } else if (etUserID.getText().toString().length()!=14) {
+                    etUserID.setError("برجاء ادخال رقم البطاقة بطريقة صحيحة");
                 } else {
                     if (Utils.isNetworkConnected(SignupActivity.this)) {
                         startSignup();
@@ -119,7 +121,7 @@ public class SignupActivity extends AppCompatActivity {
                         stopSignup();
                         if(FirebaseAuth.getInstance().getCurrentUser()!=null)
                             FirebaseAuth.getInstance().signOut();
-                        Utils.showErrorDialog(SignupActivity.this, exception.getLocalizedMessage());
+                        Utils.showErrorDialog(SignupActivity.this, "ﻻ يمكن تحميل الصورة ");
                     }
                 });
     }
@@ -133,6 +135,8 @@ public class SignupActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         etConfirmPassword = findViewById(R.id.et_confirm_password);
         etName = findViewById(R.id.et_user_name);
+        etUserID=findViewById(R.id.et_user_id);
+        etUserAddress=findViewById(R.id.et_user_address);
     }
 
     @Override
@@ -160,6 +164,8 @@ public class SignupActivity extends AppCompatActivity {
         user.setUserName(etName.getText().toString());
         user.setUserPhone(etPhone.getText().toString());
         user.setUserPasswrod(etPassword.getText().toString());
+        user.setNumberID(etUserID.getText().toString());
+        user.setAddress(etUserAddress.getText().toString());
         user.setUserAvatar(url);
         user.setLat(0.0);
         user.setLng(0.0);
@@ -204,7 +210,7 @@ public class SignupActivity extends AppCompatActivity {
                             stopSignup();
                             if(FirebaseAuth.getInstance().getCurrentUser()!=null)
                                 FirebaseAuth.getInstance().signOut();
-                            Utils.showErrorDialog(SignupActivity.this, task.getException().getLocalizedMessage());
+                            Utils.showErrorDialog(SignupActivity.this, "هذا الرقم مستخدم من قبل");
                         }
                     }
                 });

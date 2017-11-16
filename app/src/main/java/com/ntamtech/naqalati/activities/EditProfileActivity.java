@@ -43,10 +43,11 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private CircleImageView profileImage;
     private TextView tvChooseImage;
     private ProgressBar progress;
-    private EditText etUserName;
+    private EditText etUserName,etUserID,etUserAddress;
     private Uri photoUri;
     String userId;
     Button signout;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         profileImage = findViewById(R.id.profile_image);
         tvChooseImage = findViewById(R.id.tv_choose_image);
         etUserName=findViewById(R.id.et_user_name);
+        etUserID=findViewById(R.id.et_user_id);
+        etUserAddress=findViewById(R.id.et_user_address);
         signout=findViewById(R.id.signout);
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,8 +113,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 progress.setVisibility(View.GONE);
                 if(dataSnapshot==null)
                     finish();
-                User user=dataSnapshot.getValue(User.class);
+                user=dataSnapshot.getValue(User.class);
                 etUserName.setText(user.getUserName());
+                etUserID.setText(user.getNumberID());
+                etUserAddress.setText(user.getAddress());
                 if(!user.getUserAvatar().isEmpty())
                     Utils.showImage(EditProfileActivity.this,user.getUserAvatar(),profileImage);
             }
@@ -126,7 +131,10 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         if (etUserName.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, R.string.invalid_user_name, Toast.LENGTH_SHORT).show();
+            etUserName.setError(getString(R.string.invalid_user_name));
+            return;
+        }else if(etUserID.getText().toString().length()!=14){
+            etUserID.setError("برجاء ادخال رقم البطاقة بطريقة صحيحة");
             return;
         }
         progress.setVisibility(View.VISIBLE);
@@ -134,7 +142,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         findViewById(R.id.btn_edit).setVisibility(View.INVISIBLE);
         if(photoUri==null){
             // update name
-            updateName();
+            updateUser();
         }else {
             // update image and name
             uploadImage();
@@ -148,7 +156,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        updateImage(downloadUrl.toString());
+                        user.setUserAvatar(downloadUrl.toString());
+                        updateUser();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -158,19 +167,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                     }
                 });
     }
-    private void updateImage(String url){
+
+    private void updateUser(){
+        user.setUserName(etUserName.getText().toString());
+        user.setNumberID(etUserID.getText().toString());
+        user.setAddress(etUserAddress.getText().toString());
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
-                .child(userId).child("userAvatar").setValue(url).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isComplete())
-                    updateName();
-            }
-        });
-    }
-    private void updateName(){
-        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
-                .child(userId).child("userName").setValue(etUserName.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                .child(userId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isComplete())
