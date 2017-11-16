@@ -48,7 +48,13 @@
             android:name=".activities.ShowDriverInfoActivity"
             android:excludeFromRecents="true"
             android:theme="@style/myDialog" />
-        <activity android:name=".activities.EditProfileActivity"
+        <activity
+            android:name=".activities.EditProfileActivity"
+            android:theme="@style/AppTheme.NoAction" />
+        <activity
+            android:name=".activities.OptionActivity"
+            android:theme="@style/AppTheme.NoAction" />
+        <activity android:name=".activities.SpecialRequestActivity"
             android:theme="@style/AppTheme.NoAction"></activity>
     </application>
 
