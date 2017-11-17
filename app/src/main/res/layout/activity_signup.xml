@@ -9,7 +9,7 @@
     android:textDirection="rtl"
     android:fitsSystemWindows="true"
     android:fillViewport="true"
-    tools:context="com.ntamtech.naqalati.activities.SignupActivity">
+    tools:context="com.bassiouny.naqalati.activities.SignupActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.ntamtech.naqalati.activities;
+package com.bassiouny.naqalati.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -9,24 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeErrorDialog;
-import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeWarningDialog;
-import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.ntamtech.naqalati.R;
-import com.ntamtech.naqalati.helper.Utils;
-import com.ntamtech.naqalati.model.FirebaseRoot;
+import com.bassiouny.naqalati.R;
+import com.bassiouny.naqalati.helper.Utils;
+import com.bassiouny.naqalati.model.FirebaseRoot;
 
 import io.fabric.sdk.android.Fabric;
-
-import java.util.Calendar;
 
 public class SigninActivity extends AppCompatActivity {
 

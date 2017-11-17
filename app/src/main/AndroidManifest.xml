@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ntamtech.naqalati">
+    package="com.bassiouny.naqalati">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -24,7 +24,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.SigninActivity"
+            android:name="com.bassiouny.naqalati.activities.SigninActivity"
             android:theme="@style/AppTheme.NoAction">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,28 +33,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SignupActivity"
+            android:name="com.bassiouny.naqalati.activities.SignupActivity"
             android:theme="@style/AppTheme.NoAction" />
         <activity
-            android:name=".activities.HomeActivity"
+            android:name="com.bassiouny.naqalati.activities.HomeActivity"
             android:theme="@style/AppTheme.NoAction" />
-        <activity android:name=".activities.ExpiredActivity" />
+        <activity android:name="com.bassiouny.naqalati.activities.ExpiredActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="a07905da1fb4c784f0369b04a71691297ca15843" />
 
         <activity
-            android:name=".activities.ShowDriverInfoActivity"
+            android:name="com.bassiouny.naqalati.activities.ShowDriverInfoActivity"
             android:excludeFromRecents="true"
             android:theme="@style/myDialog" />
         <activity
-            android:name=".activities.EditProfileActivity"
+            android:name="com.bassiouny.naqalati.activities.EditProfileActivity"
             android:theme="@style/AppTheme.NoAction" />
         <activity
-            android:name=".activities.OptionActivity"
+            android:name="com.bassiouny.naqalati.activities.OptionActivity"
             android:theme="@style/AppTheme.NoAction" />
-        <activity android:name=".activities.SpecialRequestActivity"
+        <activity android:name="com.bassiouny.naqalati.activities.SpecialRequestActivity"
             android:theme="@style/AppTheme.NoAction"></activity>
     </application>
 

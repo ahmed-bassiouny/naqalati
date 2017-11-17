@@ -1,4 +1,4 @@
-package com.ntamtech.naqalati.helper;
+package com.bassiouny.naqalati.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;

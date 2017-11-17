@@ -1,4 +1,4 @@
-package com.ntamtech.naqalati.activities;
+package com.bassiouny.naqalati.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Spinner;
 
-import com.ntamtech.naqalati.R;
-import com.ntamtech.naqalati.helper.Constant;
+import com.bassiouny.naqalati.R;
+import com.bassiouny.naqalati.helper.Constant;
 
 public class OptionActivity extends AppCompatActivity implements View.OnClickListener{
 

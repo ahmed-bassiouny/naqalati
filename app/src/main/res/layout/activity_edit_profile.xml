@@ -7,7 +7,7 @@
     android:layoutDirection="rtl"
     android:textDirection="rtl"
     android:layout_height="match_parent"
-    tools:context="com.ntamtech.naqalati.activities.EditProfileActivity">
+    tools:context="com.bassiouny.naqalati.activities.EditProfileActivity">
 
 
     <LinearLayout

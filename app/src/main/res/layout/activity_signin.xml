@@ -7,7 +7,7 @@
     android:background="@drawable/client"
     android:layoutDirection="rtl"
     android:textDirection="rtl"
-    tools:context="com.ntamtech.naqalati.activities.SigninActivity">
+    tools:context="com.bassiouny.naqalati.activities.SigninActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,18 +1,13 @@
-package com.ntamtech.naqalati.activities;
+package com.bassiouny.naqalati.activities;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,14 +29,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mvc.imagepicker.ImagePicker;
-import com.ntamtech.naqalati.R;
-import com.ntamtech.naqalati.helper.SharedPref;
-import com.ntamtech.naqalati.helper.Utils;
-import com.ntamtech.naqalati.model.FirebaseRoot;
-import com.ntamtech.naqalati.model.RequestStatus;
-import com.ntamtech.naqalati.model.User;
-
-import java.util.List;
+import com.bassiouny.naqalati.R;
+import com.bassiouny.naqalati.helper.Utils;
+import com.bassiouny.naqalati.model.FirebaseRoot;
+import com.bassiouny.naqalati.model.RequestStatus;
+import com.bassiouny.naqalati.model.User;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

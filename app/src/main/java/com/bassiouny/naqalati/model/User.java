@@ -1,4 +1,4 @@
-package com.ntamtech.naqalati.model;
+package com.bassiouny.naqalati.model;
 
 /**
  * Created by bassiouny on 10/11/17.

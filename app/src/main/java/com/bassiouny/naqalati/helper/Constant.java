@@ -1,4 +1,4 @@
-package com.ntamtech.naqalati.helper;
+package com.bassiouny.naqalati.helper;
 
 /**
  * Created by bassiouny on 12/11/17.

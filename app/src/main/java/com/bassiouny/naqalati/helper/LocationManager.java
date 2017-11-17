@@ -1,10 +1,8 @@
-package com.ntamtech.naqalati.helper;
+package com.bassiouny.naqalati.helper;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;

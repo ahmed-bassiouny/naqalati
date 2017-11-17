@@ -1,4 +1,4 @@
-package com.ntamtech.naqalati;
+package com.bassiouny.naqalati;
 
 import org.junit.Test;
 

@@ -1,9 +1,9 @@
-package com.ntamtech.naqalati.activities;
+package com.bassiouny.naqalati.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.ntamtech.naqalati.R;
+import com.bassiouny.naqalati.R;
 
 public class ExpiredActivity extends AppCompatActivity {
 

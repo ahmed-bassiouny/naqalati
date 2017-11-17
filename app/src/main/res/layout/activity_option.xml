@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center"
-    tools:context="com.ntamtech.naqalati.activities.OptionActivity">
+    tools:context="com.bassiouny.naqalati.activities.OptionActivity">
 
     <ImageView
         android:layout_width="150dp"

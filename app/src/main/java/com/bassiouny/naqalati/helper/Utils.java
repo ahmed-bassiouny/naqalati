@@ -1,4 +1,4 @@
-package com.ntamtech.naqalati.helper;
+package com.bassiouny.naqalati.helper;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,10 +10,7 @@ import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeErrorDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeWarningDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.bumptech.glide.Glide;
-import com.ntamtech.naqalati.R;
-import com.ntamtech.naqalati.activities.SigninActivity;
-
-import static android.content.Context.LOCATION_SERVICE;
+import com.bassiouny.naqalati.R;
 
 /**
  * Created by bassiouny on 10/11/17.

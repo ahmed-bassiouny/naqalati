@@ -1,4 +1,4 @@
-package com.ntamtech.naqalati.activities;
+package com.bassiouny.naqalati.activities;
 
 import android.app.Activity;
 import android.location.Address;
@@ -28,15 +28,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.ntamtech.naqalati.R;
-import com.ntamtech.naqalati.helper.SharedPref;
-import com.ntamtech.naqalati.helper.Utils;
-import com.ntamtech.naqalati.helper.Constant;
-import com.ntamtech.naqalati.model.Driver;
-import com.ntamtech.naqalati.model.FirebaseRoot;
-import com.ntamtech.naqalati.model.Point;
-import com.ntamtech.naqalati.model.RequestInfo;
-import com.ntamtech.naqalati.model.RequestStatus;
+import com.bassiouny.naqalati.R;
+import com.bassiouny.naqalati.helper.SharedPref;
+import com.bassiouny.naqalati.helper.Utils;
+import com.bassiouny.naqalati.helper.Constant;
+import com.bassiouny.naqalati.model.Driver;
+import com.bassiouny.naqalati.model.FirebaseRoot;
+import com.bassiouny.naqalati.model.Point;
+import com.bassiouny.naqalati.model.RequestInfo;
+import com.bassiouny.naqalati.model.RequestStatus;
 
 import java.io.IOException;
 import java.util.List;

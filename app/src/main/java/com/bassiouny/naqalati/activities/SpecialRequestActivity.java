@@ -1,4 +1,4 @@
-package com.ntamtech.naqalati.activities;
+package com.bassiouny.naqalati.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.ntamtech.naqalati.R;
+import com.bassiouny.naqalati.R;
 
 public class SpecialRequestActivity extends AppCompatActivity implements View.OnClickListener {
 

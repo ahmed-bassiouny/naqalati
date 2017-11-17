@@ -1,4 +1,4 @@
-package com.ntamtech.naqalati;
+package com.bassiouny.naqalati;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
