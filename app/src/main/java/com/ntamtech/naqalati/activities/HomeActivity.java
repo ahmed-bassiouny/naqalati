@@ -99,6 +99,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     private TextView tvTime;
     Button btnArrived, btnCancel;
     private String myDriverId="";
+    private String carTypeFilter="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +178,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         }
         mapFragment.getMapAsync(this);
         setMyId();
+        carTypeFilter=getIntent().getStringExtra(Constant.CAR_TYPE_FILTER);
+        if(carTypeFilter==null)
+            carTypeFilter="";
     }
 
     private void findViewById() {
@@ -297,7 +301,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                     setLocation();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Driver driver = snapshot.getValue(Driver.class);
-                        if (driver.getCurrentRequest().isEmpty())
+                        if (driver.getCurrentRequest().isEmpty()&&driver.getCarType().equals(carTypeFilter))
                             addDriverOnMap(snapshot.getKey(), driver.getLat(), driver.getLng());
                     }
                 }

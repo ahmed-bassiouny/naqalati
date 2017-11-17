@@ -19,7 +19,7 @@ public class RequestInfo {
     private String driverPhone;
     private Double driverLng;
     private Double driverLat;
-    private CarType carType;
+    private String carType;
     private String carNumber;
     // request info
     private RequestStatus requestStatus;
@@ -116,11 +116,11 @@ public class RequestInfo {
         this.driverLat = driverLat;
     }
 
-    public CarType getCarType() {
+    public String getCarType() {
         return carType;
     }
 
-    public void setCarType(CarType carType) {
+    public void setCarType(String carType) {
         this.carType = carType;
     }
 

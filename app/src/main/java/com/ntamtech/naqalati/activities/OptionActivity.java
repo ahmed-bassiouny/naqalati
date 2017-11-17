@@ -4,15 +4,19 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Spinner;
 
 import com.ntamtech.naqalati.R;
+import com.ntamtech.naqalati.helper.Constant;
 
 public class OptionActivity extends AppCompatActivity implements View.OnClickListener{
 
+    Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
+        spinner=findViewById(R.id.sp_car_type);
         findViewById(R.id.btn_request_now).setOnClickListener(this);
         findViewById(R.id.btn_special_request).setOnClickListener(this);
     }
@@ -21,7 +25,9 @@ public class OptionActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_request_now:
-                startActivity(new Intent(OptionActivity.this, HomeActivity.class));
+                Intent intent =new Intent(OptionActivity.this, HomeActivity.class);
+                intent.putExtra(Constant.CAR_TYPE_FILTER,spinner.getSelectedItem().toString());
+                startActivity(intent);
                 break;
             case R.id.btn_special_request:
                 startActivity(new Intent(OptionActivity.this, SpecialRequestActivity.class));

@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -32,7 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.ntamtech.naqalati.R;
 import com.ntamtech.naqalati.helper.SharedPref;
 import com.ntamtech.naqalati.helper.Utils;
-import com.ntamtech.naqalati.model.CarType;
 import com.ntamtech.naqalati.helper.Constant;
 import com.ntamtech.naqalati.model.Driver;
 import com.ntamtech.naqalati.model.FirebaseRoot;
@@ -42,7 +40,6 @@ import com.ntamtech.naqalati.model.RequestStatus;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -92,7 +89,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                 if(driver!=null){
                     tvDriverName.setText(driver.getUserName());
                     tvDriverPhone.setText(driver.getUserPhone());
-                    carType.append(getCarTypeString(driver.getCarType()));
+                    carType.append(driver.getCarType());
                     carNumber.append(driver.getCarNumber());
                     if(driver.getUserAvatar()!=null && !driver.getUserAvatar().isEmpty())
                         Utils.showImage(ShowDriverInfoActivity.this,driver.getUserAvatar(),profileImage);
@@ -253,16 +250,6 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         fragmentEndPoint = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.fragment_end_point);
         chSelectMyLocation=findViewById(R.id.ch_select_myLocation);
-    }
-    private String getCarTypeString(CarType carType){
-        String result="";
-        switch (carType){
-            case FULL: result="نقل" ;break;
-            case MEDIUM: result="نص نقل" ;break;
-            case SMALL: result="ربع نقل" ;break;
-            default: result="نقل" ;
-        }
-        return result;
     }
 
     @Override
