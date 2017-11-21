@@ -28,7 +28,26 @@
                 android:drawablePadding="5dp"
                 android:hint="اسم الشركة"
                 android:lines="1"
-                android:maxLength="11"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/border_edit_text"
+            android:padding="2dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawablePadding="5dp"
+                android:digits="0123456789"
+                android:inputType="phone"
+                android:hint="رقم الهاتف"
+                android:lines="1"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
@@ -47,7 +66,6 @@
                 android:drawablePadding="5dp"
                 android:hint="العنوان"
                 android:lines="1"
-                android:maxLength="11"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
@@ -65,7 +83,6 @@
                 android:drawablePadding="5dp"
                 android:hint="البريد الالكترونى"
                 android:lines="1"
-                android:maxLength="11"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
@@ -84,7 +101,6 @@
                 android:drawablePadding="5dp"
                 android:hint="نوع الحمولة"
                 android:lines="1"
-                android:maxLength="11"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 

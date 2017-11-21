@@ -23,6 +23,7 @@ public class SpecialRequestActivity extends AppCompatActivity implements View.On
     private TextInputEditText number;
     private TextInputEditText cartype;
     private TextInputEditText numberofcar;
+    private TextInputEditText et_phone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,7 @@ public class SpecialRequestActivity extends AppCompatActivity implements View.On
         number = findViewById(R.id.number);
         cartype = findViewById(R.id.cartype);
         numberofcar = findViewById(R.id.numberofcar);
+        et_phone=findViewById(R.id.et_phone);
         findViewById(R.id.send).setOnClickListener(this);
     }
 
@@ -52,6 +54,7 @@ public class SpecialRequestActivity extends AppCompatActivity implements View.On
         }else {
             // send email
             String body = "الاسم :"+etName.getText().toString()+"\n"
+                    +"رقم الهاتف :"+et_phone.getText().toString()+"\n"
                     +"العنوان: "+etAddress.getText().toString()+"\n"
                     +"البريد الالكترونى :"+etEmail.getText().toString()+"\n"
                     +"نوع الحمولة:"+requestType.getText().toString()+"\n"
