@@ -43,7 +43,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextView tvChooseImage;
     private ProgressBar progress;
     private Button btnRegister;
-    private EditText etPhone, etPassword, etConfirmPassword, etName,etUserID,etUserAddress;
+    private EditText etPhone, etPassword, etConfirmPassword, etName,etUserID,etUserAddress,etUserEmail;
     private final int requestLocationPermission =123;
 
     private Uri photoUri;
@@ -161,6 +161,7 @@ public class SignupActivity extends AppCompatActivity {
         user.setUserAvatar(url);
         user.setLat(0.0);
         user.setLng(0.0);
+        user.setEmail(etUserEmail.getText().toString());
         user.setCurrentRequest("");
         user.setRequestStatus(RequestStatus.NO_REQUEST);
 

@@ -2,6 +2,7 @@ package com.bassiouny.naqalati.helper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.widget.ImageView;
@@ -12,6 +13,9 @@ import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.bumptech.glide.Glide;
 import com.bassiouny.naqalati.R;
 
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
+
 /**
  * Created by bassiouny on 10/11/17.
  */
@@ -19,6 +23,8 @@ import com.bassiouny.naqalati.R;
 public class Utils {
     static AwesomeWarningDialog awesomeWarningDialog;
     static AwesomeErrorDialog awesomeErrorDialog;
+    private static ACProgressFlower dialog;
+
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -78,6 +84,21 @@ public class Utils {
     public static boolean isGpsEnable(Context context){
         LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+    public static void showDialog(Context context) {
+        if (dialog == null) {
+            dialog = new ACProgressFlower.Builder(context)
+                    .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                    .themeColor(Color.WHITE)
+                    .text("من فضلك انتظر")
+                    .fadeColor(Color.DKGRAY).build();
+        }
+        dialog.show();
+    }
+
+    public static void dismissDialog() {
+        if (dialog != null && dialog.isShowing())
+            dialog.dismiss();
     }
 
 

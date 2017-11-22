@@ -130,6 +130,19 @@
             android:maxLines="1"
             android:minHeight="30dp"
             android:padding="5dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_edit_text"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_email"
+            android:hint="البريد الالكترونى"
+            android:lines="1"
+            android:id="@+id/et_user_email"
+            android:maxLines="1"
+            android:minHeight="30dp"
+            android:padding="5dp" />
 
         <ProgressBar
             android:id="@+id/progress"
