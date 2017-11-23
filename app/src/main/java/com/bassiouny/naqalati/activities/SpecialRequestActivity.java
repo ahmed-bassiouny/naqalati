@@ -53,17 +53,6 @@ public class SpecialRequestActivity extends AppCompatActivity implements View.On
         numberofcar = findViewById(R.id.numberofcar);
         et_phone = findViewById(R.id.et_phone);
         findViewById(R.id.send).setOnClickListener(this);
-        FirebaseDatabase.getInstance().getReference().child(FirebaseRoot.DB_DRIVER).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Toast.makeText(SpecialRequestActivity.this, dataSnapshot.getChildrenCount() + "", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override
