@@ -129,6 +129,7 @@ public class SignupActivity extends AppCompatActivity {
         etName = findViewById(R.id.et_user_name);
         etUserID=findViewById(R.id.et_user_id);
         etUserAddress=findViewById(R.id.et_user_address);
+        etUserEmail=findViewById(R.id.et_user_email);
     }
 
     @Override
