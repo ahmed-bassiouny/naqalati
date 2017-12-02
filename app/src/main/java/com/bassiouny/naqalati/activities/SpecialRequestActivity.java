@@ -65,6 +65,7 @@ public class SpecialRequestActivity extends AppCompatActivity implements View.On
             return;
         } else {
             // send email
+            findViewById(R.id.send).setEnabled(false);
             Utils.showDialog(this);
             final String body = "الاسم :" + etName.getText().toString() + "\n"
                     + "رقم الهاتف :" + et_phone.getText().toString() + "\n"
@@ -93,15 +94,17 @@ public class SpecialRequestActivity extends AppCompatActivity implements View.On
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         Intent send = new Intent(Intent.ACTION_SENDTO);
-                        String uriText = "mailto:" + Uri.encode("anwar.abdo1980@gmail.com") +
+                        String uriText = "mailto:" + Uri.encode("Youssefmandour202@gmail.com") +
                                 "?subject=" + Uri.encode("نقلتى") +
                                 "&body=" + Uri.encode(body);
                         Uri uri = Uri.parse(uriText);
                         Utils.dismissDialog();
                         send.setData(uri);
                         startActivity(Intent.createChooser(send, "Send mail..."));
+                        finish();
                     } else {
                         Utils.dismissDialog();
+                        findViewById(R.id.send).setEnabled(true);
                         Utils.showErrorDialog(SpecialRequestActivity.this, "ﻻ نستطيع ارسال الطلب الان");
                     }
                 }
