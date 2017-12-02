@@ -26,6 +26,7 @@ public class RequestInfo {
     private String reason;
     private Point startPoint;
     private Point endPoint;
+    private String price;
 
     public void setUserInfo(String userId,String userName ,String userPhone, String userImage,Double userLat,Double userLng){
         this.userId=userId;
@@ -178,5 +179,14 @@ public class RequestInfo {
 
     public void setDriverPhone(String driverPhone) {
         this.driverPhone = driverPhone;
+    }
+    public String getPrice() {
+        if(price == null)
+            price = "0";
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

@@ -24,6 +24,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -66,7 +67,10 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
     private PlaceAutocompleteFragment fragmentEndPoint;
     private RequestInfo requestInfo ;
     private CheckBox chSelectMyLocation;
-    Driver driver;
+    private Driver driver;
+    private TextView tvPrice;
+    private Button btnAccept;
+    private String priceRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,10 +129,6 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                 if(haveRequest){
                     // cancel request
                     deleteRequest();
-                    imgClose.setVisibility(View.VISIBLE);
-                    haveRequest=false;
-                    btnRequestDriver.setText(getString(R.string.request_driver));
-                    containerSubInfo.setVisibility(View.INVISIBLE);
                 }else {
                     // make request
                     if(requestInfo.getStartPoint()==null){
@@ -139,6 +139,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                         return;
                     }
                     createRequest();
+                    addListenerForRequest();
                     imgClose.setVisibility(View.INVISIBLE);
                     haveRequest=true;
                     btnRequestDriver.setText(getString(R.string.cancel_request));
@@ -207,6 +208,14 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                 }
             }
         });
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateRealRequest();
+                setResult(Activity.RESULT_OK);
+                finish();
+            }
+        });
     }
 
     private void getDriverId() {
@@ -245,6 +254,8 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         tvWaiting = findViewById(R.id.tv_waiting);
         progressInfo = findViewById(R.id.progress_info);
         imgClose = findViewById(R.id.img_close);
+        tvPrice = findViewById(R.id.tv_price);
+        btnAccept = findViewById(R.id.btn_accept);
         fragmentStartPoint = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.fragment_start_point);
         fragmentEndPoint = (PlaceAutocompleteFragment)
@@ -277,14 +288,19 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         });
     }
     private void initRequestStatueListener(){
-        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
-                .child(userId).child(FirebaseRoot.DB_REQUEST_STATUS).addValueEventListener(getRequestStatueListener());
+        // request id = driver id - user id
+        String requestId = driverId+"-"+ userId;
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
+                .child(driverId).child(FirebaseRoot.DB_PENDING_REQUEST).child(requestId)
+                .child(FirebaseRoot.DB_PRICE).addValueEventListener(getRequestStatueListener());
     }
     private void removeRequestStatueListener(){
         if(requestStatueListener==null)
             return;
-        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
-                .child(userId).child(FirebaseRoot.DB_REQUEST_STATUS).removeEventListener(requestStatueListener);
+        String requestId = driverId+"-"+ userId;
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
+                .child(driverId).child(FirebaseRoot.DB_PENDING_REQUEST).child(requestId)
+                .child(FirebaseRoot.DB_PRICE).removeEventListener(requestStatueListener);
     }
 
     private ValueEventListener getRequestStatueListener(){
@@ -292,15 +308,11 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot!=null){
-                    RequestStatus requestStatus = dataSnapshot.getValue(RequestStatus.class);
-                    if(requestStatus==RequestStatus.ACCEPT){
-                        Toast.makeText(ShowDriverInfoActivity.this, R.string.request_accept, Toast.LENGTH_LONG).show();
-                        CreateRealRequest();
-                        setResult(Activity.RESULT_OK);
-                        finish();
-                    }else if (requestStatus==RequestStatus.REFUSE) {
-                        Toast.makeText(ShowDriverInfoActivity.this, R.string.request_refuse, Toast.LENGTH_LONG).show();
-                        finish();
+                    priceRequest = dataSnapshot.getValue(String.class);
+                    if(priceRequest!=null&&Integer.parseInt(priceRequest)>0){
+                        tvPrice.setText("السعر المطلوب : "+priceRequest);
+                        tvPrice.setVisibility(View.VISIBLE);
+                        btnAccept.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -316,7 +328,6 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         deleteRequest();
-        finish();
     }
     private void deleteRequest(){
         String requestId = driverId+"-"+ userId;
@@ -345,6 +356,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         requestInfo.setRequestStatus(RequestStatus.DRIVER_GO_TO_START_POINT);
         requestInfo.setCarNumber(driver.getCarNumber());
         requestInfo.setCarType(driver.getCarType());
+        requestInfo.setPrice(priceRequest);
         // generate key for request
         String key =FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS).push().getKey();
         // update currentRequest in driver
@@ -357,5 +369,35 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                 .setValue(key);
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS).child(key)
                 .setValue(requestInfo);
+    }
+    private void addListenerForRequest(){
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
+                .child(driverId).child(FirebaseRoot.DB_PENDING_REQUEST)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        finish();
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 }
