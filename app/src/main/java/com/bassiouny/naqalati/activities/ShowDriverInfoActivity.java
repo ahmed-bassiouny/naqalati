@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -71,6 +72,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
     private TextView tvPrice;
     private Button btnAccept;
     private String priceRequest;
+    private TextInputEditText etProductType,etProductSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +138,12 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                         return;
                     }else if(requestInfo.getEndPoint()==null){
                         Toast.makeText(ShowDriverInfoActivity.this, getString(R.string.end_point), Toast.LENGTH_SHORT).show();
+                        return;
+                    }else if(etProductType.getText().toString().trim().isEmpty()){
+                        etProductType.setError("برجاء ادخال نوع البضاعة");
+                        return;
+                    }else if(etProductSize.getText().toString().trim().isEmpty()){
+                        etProductSize.setError("برجاء ادخال الكمية");
                         return;
                     }
                     createRequest();
@@ -261,6 +269,8 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         fragmentEndPoint = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.fragment_end_point);
         chSelectMyLocation=findViewById(R.id.ch_select_myLocation);
+        etProductType = findViewById(R.id.et_product_type);
+        etProductSize = findViewById(R.id.et_product_size);
     }
 
     @Override
@@ -275,6 +285,9 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         // create request info object to save
         requestInfo.setUserInfo(userId, SharedPref.getUserName(this),SharedPref.getPhone(this),SharedPref.getUserImage(this)
         ,Double.parseDouble(SharedPref.getUserLat(this)),Double.parseDouble(SharedPref.getUserLng(this)));
+        //set product type and size
+        requestInfo.setProductType(etProductType.getText().toString());
+        requestInfo.setProductSize(etProductSize.getText().toString());
         // save request info in driver (pending requests root)
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
                 .child(driverId).child(FirebaseRoot.DB_PENDING_REQUEST).child(requestId)

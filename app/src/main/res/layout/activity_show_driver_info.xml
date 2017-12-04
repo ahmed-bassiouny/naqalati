@@ -119,11 +119,44 @@
             android:layout_margin="5dp"
             android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/border_edit_text"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_product_type"
+                android:maxLines="1"
+                android:lines="1"
+                android:drawablePadding="5dp"
+                android:hint="نوع البضاعة" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/border_edit_text"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_product_size"
+                android:maxLines="1"
+                android:lines="1"
+                android:drawablePadding="5dp"
+                android:hint="الكمية" />
+        </android.support.design.widget.TextInputLayout>
+
         <Button
             android:id="@+id/btn_request_driver"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="5dp"
             android:background="@drawable/border_button"
             android:text="@string/request_driver"
             android:textColor="@color/white"
