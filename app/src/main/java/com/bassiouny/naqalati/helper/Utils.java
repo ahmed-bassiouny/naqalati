@@ -13,6 +13,11 @@ import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.bumptech.glide.Glide;
 import com.bassiouny.naqalati.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 
@@ -101,5 +106,11 @@ public class Utils {
             dialog.dismiss();
     }
 
-
+    public static String getCurrentDate(){
+        //                              day-months-year
+        // this method return date today like 2017-2-19
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        /*LocalDateTime now = LocalDateTime.now();*/
+        return dateFormat.format(Calendar.getInstance().getTime());
+    }
 }

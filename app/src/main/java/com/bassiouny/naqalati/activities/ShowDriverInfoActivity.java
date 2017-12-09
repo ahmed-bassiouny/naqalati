@@ -370,6 +370,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         requestInfo.setCarNumber(driver.getCarNumber());
         requestInfo.setCarType(driver.getCarType());
         requestInfo.setPrice(priceRequest);
+        requestInfo.setDate(Utils.getCurrentDate());
         // generate key for request
         String key =FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS).push().getKey();
         // update currentRequest in driver
