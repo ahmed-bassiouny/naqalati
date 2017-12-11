@@ -395,7 +395,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                     progress.setVisibility(View.VISIBLE);
                     Toast.makeText(HomeActivity.this, R.string.waiting, Toast.LENGTH_SHORT).show();
                     container.setVisibility(View.VISIBLE);
-                    setUserInfo(requestInfo);
+                    setDriverInfo(requestInfo);
                     btnArrived.setVisibility(View.INVISIBLE);
                     googleMap.clear();
                     setLocation();
@@ -451,7 +451,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                 } else if (requestInfo.getRequestStatus() == RequestStatus.DRIVER_GO_TO_END_POINT) {
                     progress.setVisibility(View.VISIBLE);
                     Toast.makeText(HomeActivity.this, R.string.waiting, Toast.LENGTH_SHORT).show();
-                    setUserInfo(requestInfo);
+                    setDriverInfo(requestInfo);
                     container.setVisibility(View.VISIBLE);
                     btnArrived.setVisibility(View.VISIBLE);
                     googleMap.clear();
@@ -548,12 +548,12 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         return currentRequestListener;
     }
 
-    private void setUserInfo(RequestInfo userInfo) {
-        tvDriverName.setText(userInfo.getUserName());
-        tvDriverPhone.setText(userInfo.getUserPhone());
+    private void setDriverInfo(RequestInfo userInfo) {
+        tvDriverName.setText(userInfo.getDriverName());
+        tvDriverPhone.setText(userInfo.getDriverPhone());
         tvDriverCarNumber.setText(userInfo.getCarNumber());
-        if (!userInfo.getUserImage().isEmpty())
-            Utils.showImage(this, userInfo.getUserImage(), profileImage);
+        if (!userInfo.getDriverImage().isEmpty())
+            Utils.showImage(this, userInfo.getDriverImage(), profileImage);
     }
 
     private String convertTimeToArabic(String time) {
