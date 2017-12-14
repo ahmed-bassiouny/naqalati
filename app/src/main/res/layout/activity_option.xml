@@ -4,20 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
     android:background="@drawable/client"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:layoutDirection="rtl"
     android:orientation="vertical"
     android:textDirection="rtl"
     tools:context="com.bassiouny.naqalati.activities.OptionActivity">
 
     <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_menu"
+        android:layout_gravity="right"
+        android:id="@+id/iv_menu"
+        android:background="@color/white"
+        android:padding="5dp"
+        android:layout_margin="10dp" />
+    <ImageView
         android:id="@+id/logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
         android:src="@drawable/logo" />
 
     <TextView

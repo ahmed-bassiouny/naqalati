@@ -63,8 +63,18 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".firebase.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
 
-        <activity android:name=".activities.PermissionActivity"></activity>
+        <activity android:name=".activities.PermissionActivity"
+            android:theme="@style/AppTheme.NoAction"/>
+        <activity android:name=".activities.UploadFileActivity"
+            android:theme="@style/AppTheme.NoAction"/>
+        <activity android:name=".activities.MenuActivity"
+            android:theme="@style/AppTheme.NoAction"></activity>
     </application>
 
 </manifest>

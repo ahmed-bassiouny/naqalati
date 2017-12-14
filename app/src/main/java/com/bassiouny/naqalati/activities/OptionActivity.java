@@ -33,6 +33,12 @@ public class OptionActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.btn_request_now).setOnClickListener(this);
         findViewById(R.id.btn_special_request).setOnClickListener(this);
         checkIfTokenUpdated();
+        findViewById(R.id.iv_menu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(OptionActivity.this,MenuActivity.class));
+            }
+        });
     }
 
     @Override
