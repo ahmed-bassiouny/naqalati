@@ -15,6 +15,8 @@ public class SharedPref {
     public static final String imageKey = "imageKey";
     public static final String latKey = "latKey";
     public static final String lngKey = "lngKey";
+    public static final String TokenKey = "token";
+    public static final String UpdatedTokenKey = "updated_token";
     private static SharedPreferences sharedpreferences;
 
     private static void init(Context context){
@@ -55,5 +57,26 @@ public class SharedPref {
     public static String getUserLng(Context context){
         init(context);
         return sharedpreferences.getString(lngKey,"0.0");
+    }
+    public static void setToken(Context context,String token){
+        init(context);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(TokenKey,token);
+        editor.putBoolean(UpdatedTokenKey,false);
+        editor.apply();
+    }
+    public static void setUpdatedToken(Context context){
+        init(context);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putBoolean(UpdatedTokenKey,true);
+        editor.apply();
+    }
+    public static String getToken(Context context){
+        init(context);
+        return sharedpreferences.getString(TokenKey,"");
+    }
+    public static boolean updatedToken(Context context){
+        init(context);
+        return sharedpreferences.getBoolean(UpdatedTokenKey,false);
     }
 }

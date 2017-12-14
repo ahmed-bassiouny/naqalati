@@ -17,4 +17,5 @@ public class FirebaseRoot {
     public static final String DB_LAT="lat";
     public static final String DB_LNG="lng";
     public static final String DB_PRICE = "price";
+    public static final String DB_TOKEN = "token";
 }

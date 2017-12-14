@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bassiouny.naqalati.helper.HttpRequest;
 import com.directions.route.Route;
 import com.directions.route.RouteException;
 import com.directions.route.Routing;

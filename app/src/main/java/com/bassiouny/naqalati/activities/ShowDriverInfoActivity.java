@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bassiouny.naqalati.helper.HttpRequest;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
@@ -148,6 +149,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                     }
                     createRequest();
                     addListenerForRequest();
+                    HttpRequest.sendNotify(ShowDriverInfoActivity.this,driver.getToken());
                     imgClose.setVisibility(View.INVISIBLE);
                     haveRequest=true;
                     btnRequestDriver.setText(getString(R.string.cancel_request));
