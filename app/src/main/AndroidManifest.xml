@@ -24,7 +24,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.bassiouny.naqalati.activities.SigninActivity"
+            android:name=".activities.SigninActivity"
             android:theme="@style/AppTheme.NoAction">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,35 +33,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.bassiouny.naqalati.activities.SignupActivity"
+            android:name=".activities.SignupActivity"
             android:theme="@style/AppTheme.NoAction" />
         <activity
-            android:name="com.bassiouny.naqalati.activities.HomeActivity"
+            android:name=".activities.HomeActivity"
             android:theme="@style/AppTheme.NoAction" />
-        <activity android:name="com.bassiouny.naqalati.activities.ExpiredActivity" />
+        <activity android:name=".activities.ExpiredActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="a07905da1fb4c784f0369b04a71691297ca15843" />
 
         <activity
-            android:name="com.bassiouny.naqalati.activities.ShowDriverInfoActivity"
+            android:name=".activities.ShowDriverInfoActivity"
             android:excludeFromRecents="true"
             android:theme="@style/myDialog" />
         <activity
-            android:name="com.bassiouny.naqalati.activities.EditProfileActivity"
+            android:name=".activities.EditProfileActivity"
             android:theme="@style/AppTheme.NoAction" />
         <activity
-            android:name="com.bassiouny.naqalati.activities.OptionActivity"
+            android:name=".activities.OptionActivity"
             android:theme="@style/AppTheme.NoAction" />
-        <activity android:name="com.bassiouny.naqalati.activities.SpecialRequestActivity"
-            android:theme="@style/AppTheme.NoAction"></activity>
-        <service
-            android:name=".firebase.MyFirebaseInstanceIDService">
+        <activity
+            android:name=".activities.SpecialRequestActivity"
+            android:theme="@style/AppTheme.NoAction" />
+
+        <service android:name=".firebase.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".activities.PermissionActivity"></activity>
     </application>
 
 </manifest>

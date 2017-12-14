@@ -52,7 +52,6 @@ public class OptionActivity extends AppCompatActivity implements View.OnClickLis
     private void checkIfTokenUpdated() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null)
             return;
-        Log.e("checkIfTokenUpdated: ", FirebaseAuth.getInstance().getCurrentUser().getUid());
         if (!SharedPref.updatedToken(this)) {
             // this case mean i don't update token user in firebase so i will make request to update it
             FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)

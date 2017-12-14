@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,9 +41,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SignupActivity extends AppCompatActivity {
 
     private CircleImageView profileImage;
-    private TextView tvChooseImage;
+    private TextView tvChooseImage,tvTerms;
     private ProgressBar progress;
     private Button btnRegister;
+    private CheckBox chTerms;
     private EditText etPhone, etPassword, etConfirmPassword, etName,etUserID,etUserAddress,etUserEmail;
     private final int requestLocationPermission =123;
 
@@ -78,7 +80,9 @@ public class SignupActivity extends AppCompatActivity {
                     etName.setError(getString(R.string.invalid_user_name));
                 } else if (etUserID.getText().toString().length()!=14) {
                     etUserID.setError("برجاء ادخال رقم البطاقة بطريقة صحيحة");
-                } else {
+                } else if (!chTerms.isChecked()){
+                    Toast.makeText(SignupActivity.this, "يجب ان توافق على شروط الاستخدام", Toast.LENGTH_LONG).show();
+                }else {
                     if (Utils.isNetworkConnected(SignupActivity.this)) {
                         startSignup();
                         signUp();
@@ -92,6 +96,12 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ImagePicker.pickImage(SignupActivity.this, getString(R.string.choose_image));
+            }
+        });
+        tvTerms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignupActivity.this,PermissionActivity.class));
             }
         });
     }
@@ -130,6 +140,8 @@ public class SignupActivity extends AppCompatActivity {
         etUserID=findViewById(R.id.et_user_id);
         etUserAddress=findViewById(R.id.et_user_address);
         etUserEmail=findViewById(R.id.et_user_email);
+        chTerms = findViewById(R.id.ch_terms);
+        tvTerms = findViewById(R.id.tv_terms);
     }
 
     @Override

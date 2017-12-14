@@ -62,7 +62,7 @@
     <array name="car_type_value">
         <item>ونش انقاذ</item>
         <item>كساحة</item>
-        <item> لودر</item>
+        <item>لودر</item>
         <item>ربع نقل صندوق مفتوح</item>
         <item>ربع نقل صندوق مغلق</item>
         <item>ربع نقل صندوق مبرد</item>
@@ -85,6 +85,10 @@
         <item>حفار شكوش</item>
         <item>ونش موبليا</item>
         <item>معدات</item>
+        <item>اتوبيس خاص</item>
+        <item>اتوبيس رحلات</item>
     </array>
+    <string name="terms"> اضغط هنا لمشاهدة شروط الاستخدام</string>
+    <string name="accept_terms">موافق على شروط الاستخدام</string>
 
 </resources>

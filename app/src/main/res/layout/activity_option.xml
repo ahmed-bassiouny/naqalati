@@ -28,6 +28,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/border_button_white"
         android:padding="10dp"
+        android:textStyle="bold"
         android:text="نوع السيارة المراد البحث عنها"
         android:textColor="@color/red_logo"
         android:textSize="20sp" />
