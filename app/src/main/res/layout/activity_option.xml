@@ -23,6 +23,7 @@
     <ImageView
         android:id="@+id/logo"
         android:layout_width="150dp"
+        android:layout_marginTop="-30dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/logo" />
@@ -54,6 +55,14 @@
             android:orientation="vertical" />
     </FrameLayout>
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/et_shaceh_number_car"
+        android:background="@drawable/border_edit_text"
+        android:hint="برجاء ادخال رقم العربية او رقم الرخصة"/>
     <Button
         android:id="@+id/btn_request_now"
         android:layout_width="200dp"

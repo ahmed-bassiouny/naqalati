@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.bassiouny.naqalati.R;
@@ -20,13 +21,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class OptionActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Spinner spinner;
-
+    private Spinner spinner;
+    private EditText etShacehNumberCar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
         spinner = findViewById(R.id.sp_car_type);
+        etShacehNumberCar = findViewById(R.id.et_shaceh_number_car);
         ArrayAdapter mAdapter = ArrayAdapter.createFromResource(this, R.array.car_type_value,
                 android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(mAdapter);
@@ -47,6 +49,7 @@ public class OptionActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_request_now:
                 Intent intent = new Intent(OptionActivity.this, HomeActivity.class);
                 intent.putExtra(Constant.CAR_TYPE_FILTER, spinner.getSelectedItem().toString());
+                intent.putExtra(Constant.CAR_SHACEH_NUMBER_FILTER, etShacehNumberCar.getText().toString());
                 startActivity(intent);
                 break;
             case R.id.btn_special_request:

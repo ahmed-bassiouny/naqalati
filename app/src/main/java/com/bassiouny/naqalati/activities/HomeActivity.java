@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bassiouny.naqalati.helper.HttpRequest;
 import com.directions.route.Route;
 import com.directions.route.RouteException;
 import com.directions.route.Routing;
@@ -90,8 +89,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     private TextView tvDriverCarNumber;
     private TextView tvTime;
     Button btnArrived, btnCancel;
-    private String myDriverId="";
-    private String carTypeFilter="";
+    private String myDriverId = "";
+    private String carTypeFilter = "";
+    private String carShacehNumberCar = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +140,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this,EditProfileActivity.class));
+                startActivity(new Intent(HomeActivity.this, EditProfileActivity.class));
                 finish();
             }
         });
@@ -170,9 +170,12 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
         }
         mapFragment.getMapAsync(this);
         setMyId();
-        carTypeFilter=getIntent().getStringExtra(Constant.CAR_TYPE_FILTER);
-        if(carTypeFilter==null)
-            carTypeFilter="";
+        carTypeFilter = getIntent().getStringExtra(Constant.CAR_TYPE_FILTER);
+        if (carTypeFilter == null)
+            carTypeFilter = "";
+        carShacehNumberCar = getIntent().getStringExtra(Constant.CAR_SHACEH_NUMBER_FILTER);
+        if (carShacehNumberCar == null)
+            carShacehNumberCar = "";
     }
 
     private void findViewById() {
@@ -291,10 +294,19 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                 if (dataSnapshot != null) {
                     googleMap.clear();
                     setLocation();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Driver driver = snapshot.getValue(Driver.class);
-                        if (driver.getCurrentRequest().isEmpty()&&driver.getCarType().equals(carTypeFilter))
-                            addDriverOnMap(snapshot.getKey(), driver.getLat(), driver.getLng());
+                    if (carShacehNumberCar.isEmpty()) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Driver driver = snapshot.getValue(Driver.class);
+                            if (driver.getCurrentRequest().isEmpty() && driver.getCarType().equals(carTypeFilter))
+                                addDriverOnMap(snapshot.getKey(), driver.getLat(), driver.getLng());
+                        }
+                    } else {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Driver driver = snapshot.getValue(Driver.class);
+                            if ((driver.getCurrentRequest().isEmpty() && driver.getCarType().equals(carTypeFilter)) &&
+                                    (driver.getShaceh().equals(carShacehNumberCar) || driver.getCarNumber().equals(carShacehNumberCar)))
+                                addDriverOnMap(snapshot.getKey(), driver.getLat(), driver.getLng());
+                        }
                     }
                 }
             }
@@ -388,9 +400,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RequestInfo requestInfo = dataSnapshot.getValue(RequestInfo.class);
-                if(requestInfo==null)
+                if (requestInfo == null)
                     return;
-                myDriverId=requestInfo.getDriverId();
+                myDriverId = requestInfo.getDriverId();
                 addMyDriverCar();
                 if (requestInfo.getRequestStatus() == RequestStatus.DRIVER_GO_TO_START_POINT) {
                     progress.setVisibility(View.VISIBLE);
@@ -572,10 +584,10 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             listenerOnMyDriver = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Driver driver =dataSnapshot.getValue(Driver.class);
-                    if(driver==null)
+                    Driver driver = dataSnapshot.getValue(Driver.class);
+                    if (driver == null)
                         return;
-                    if(myDriverMarker!=null)
+                    if (myDriverMarker != null)
                         myDriverMarker.remove();
                     LatLng person = new LatLng(driver.getLat(), driver.getLng());
                     MarkerOptions markerOptions = new MarkerOptions().position(person);
@@ -590,20 +602,22 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             };
         return listenerOnMyDriver;
     }
-    private void addMyDriverCar(){
-        if(listenerOnMyDriver==null)
-        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
-                .child(myDriverId).addValueEventListener(getListenerOnMyDriver());
+
+    private void addMyDriverCar() {
+        if (listenerOnMyDriver == null)
+            FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
+                    .child(myDriverId).addValueEventListener(getListenerOnMyDriver());
     }
-    private void removeMyDriverCar(){
-        if(listenerOnMyDriver!=null) {
+
+    private void removeMyDriverCar() {
+        if (listenerOnMyDriver != null) {
             FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
                     .child(myDriverId).removeEventListener(listenerOnMyDriver);
-            listenerOnMyDriver=null;
+            listenerOnMyDriver = null;
         }
-        if(myDriverMarker!=null) {
+        if (myDriverMarker != null) {
             myDriverMarker.remove();
-            myDriverMarker=null;
+            myDriverMarker = null;
         }
     }
 
