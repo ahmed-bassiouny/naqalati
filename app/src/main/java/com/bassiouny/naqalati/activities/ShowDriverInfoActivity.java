@@ -362,7 +362,6 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         String key =FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS).push().getKey();
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS).child(key)
                 .setValue(requestInfo);
-        Log.e( "deleteRequest: ", key);
     }
     private String createFullAddress(Address objAddress){
         String address = objAddress.getAddressLine(0);

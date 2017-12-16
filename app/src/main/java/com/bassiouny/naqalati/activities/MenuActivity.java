@@ -12,7 +12,7 @@ import com.bassiouny.naqalati.R;
 
 public class MenuActivity extends AppCompatActivity {
 
-    String[] values = new String[] { "ارسال صورة للادارة" };
+    String[] values = new String[] { "ارسال صورة للادارة" ,"الاتصال بنا"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +27,9 @@ public class MenuActivity extends AppCompatActivity {
                 switch (position){
                     case 0:
                         startActivity(new Intent(MenuActivity.this,UploadFileActivity.class));
+                        break;
+                    case 1:
+                        startActivity(new Intent(MenuActivity.this,ContactUsActivity.class));
                         break;
                 }
             }
