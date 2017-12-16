@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -339,11 +340,6 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         return requestStatueListener;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        deleteRequest();
-    }
     private void deleteRequest(){
         String requestId = driverId+"-"+ userId;
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
@@ -351,6 +347,22 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(userId).child(FirebaseRoot.DB_REQUEST_STATUS).setValue(RequestStatus.NO_REQUEST);
         removeRequestStatueListener();
+        // Complete required attribte in request info object
+        requestInfo.setDriverName(driver.getUserName());
+        requestInfo.setDriverPhone(driver.getUserPhone());
+        requestInfo.setDriverImage(driver.getUserAvatar());
+        requestInfo.setUserId(userId);
+        requestInfo.setDriverId(driverId);
+        requestInfo.setCarNumber(driver.getCarNumber());
+        requestInfo.setCarType(driver.getCarType());
+        requestInfo.setRequestStatus(RequestStatus.REFUSE_FROM_USER);
+        requestInfo.setPrice(priceRequest);
+        requestInfo.setDate(Utils.getCurrentDate());
+        // generate key for request
+        String key =FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS).push().getKey();
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS).child(key)
+                .setValue(requestInfo);
+        Log.e( "deleteRequest: ", key);
     }
     private String createFullAddress(Address objAddress){
         String address = objAddress.getAddressLine(0);
