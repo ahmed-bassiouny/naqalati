@@ -79,6 +79,7 @@ public class UploadFileActivity extends AppCompatActivity {
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         file.setUserUploadedId(userId);
         file.setUserType(FirebaseRoot.DB_USER);
+        file.setDate(Utils.getCurrentDate());
         final DatabaseReference dbUrl = FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_FILES);
         StorageReference storageRef = FirebaseStorage.getInstance().getReference(userId);
         storageRef.putFile(photoUri)

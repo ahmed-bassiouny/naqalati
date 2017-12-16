@@ -8,7 +8,7 @@ public class File {
     private String userUploadedId;
     private String path;
     private String userType;
-
+    private String date;
 
     public String getUserUploadedId() {
         return userUploadedId;
@@ -32,5 +32,12 @@ public class File {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
