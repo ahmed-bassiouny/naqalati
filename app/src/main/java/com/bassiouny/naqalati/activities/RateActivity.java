@@ -37,6 +37,7 @@ public class RateActivity extends AppCompatActivity implements View.OnClickListe
                             .child(requestId)
                             .child("rate_from_user")
                             .setValue(ratingBar.getRating());
+                    finish();
                 }
                 break;
             case R.id.btn_cancel:
