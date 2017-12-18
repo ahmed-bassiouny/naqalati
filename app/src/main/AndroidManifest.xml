@@ -78,7 +78,10 @@
         <activity
             android:name=".activities.MenuActivity"
             android:theme="@style/AppTheme.NoAction" />
-        <activity android:name=".activities.ContactUsActivity"
+        <activity
+            android:name=".activities.ContactUsActivity"
+            android:theme="@style/AppThemeDialog" />
+        <activity android:name=".activities.RateActivity"
             android:theme="@style/AppThemeDialog"></activity>
     </application>
 

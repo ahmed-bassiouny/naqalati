@@ -523,6 +523,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                     haveRequest = false;
                     container.setVisibility(View.GONE);
                     progress.setVisibility(View.GONE);
+                    rateDriver(currentRequest);
                     removeListenerOnCurrentRequest();
                     removeCurrentRequest();
                     removeMyDriverCar();
@@ -534,6 +535,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                     haveRequest = false;
                     container.setVisibility(View.GONE);
                     progress.setVisibility(View.GONE);
+                    rateDriver(currentRequest);
                     removeListenerOnCurrentRequest();
                     removeCurrentRequest();
                     removeMyDriverCar();
@@ -545,6 +547,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                     haveRequest = false;
                     container.setVisibility(View.GONE);
                     progress.setVisibility(View.GONE);
+                    rateDriver(currentRequest);
                     removeListenerOnCurrentRequest();
                     removeCurrentRequest();
                     removeMyDriverCar();
@@ -559,6 +562,12 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
             }
         };
         return currentRequestListener;
+    }
+
+    private void rateDriver(String request) {
+        Intent intent = new Intent(this,RateActivity.class);
+        intent.putExtra(Constant.REQUEST_ID,request);
+        startActivity(intent);
     }
 
     private void setDriverInfo(RequestInfo userInfo) {

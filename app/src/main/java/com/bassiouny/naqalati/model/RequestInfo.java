@@ -97,6 +97,8 @@ public class RequestInfo {
     }
 
     public String getDriverImage() {
+        if(driverImage==null)
+            driverImage="";
         return driverImage;
     }
 
