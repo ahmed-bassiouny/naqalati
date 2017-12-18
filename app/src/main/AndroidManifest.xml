@@ -81,8 +81,12 @@
         <activity
             android:name=".activities.ContactUsActivity"
             android:theme="@style/AppThemeDialog" />
-        <activity android:name=".activities.RateActivity"
-            android:theme="@style/AppThemeDialog"></activity>
+        <activity
+            android:name=".activities.RateActivity"
+            android:theme="@style/AppThemeDialog" />
+        <activity
+            android:name=".activities.MessageActivity"
+            android:theme="@style/AppTheme.NoAction"></activity>
     </application>
 
 </manifest>
