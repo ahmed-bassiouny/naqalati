@@ -281,7 +281,7 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
     }
     private void createRequest(){
         // request id = driver id - user id
-        String requestId = driverId+"-"+ userId;
+        final String requestId = driverId+"-"+ userId;
         // update in my data to make request status = waiting
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(userId).child(FirebaseRoot.DB_REQUEST_STATUS).setValue(RequestStatus.WAITING);
@@ -298,10 +298,14 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
+                    // add this request in all request root
+                    FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_ALL_PENDING_REQUEST)
+                            .child(requestId).setValue(requestInfo);
                     initRequestStatueListener();
                 }
             }
         });
+
     }
     private void initRequestStatueListener(){
         // request id = driver id - user id
@@ -344,6 +348,10 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         String requestId = driverId+"-"+ userId;
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
                 .child(driverId).child(FirebaseRoot.DB_PENDING_REQUEST).child(requestId).removeValue();
+        // remove this request from all requests root
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_ALL_PENDING_REQUEST)
+                .child(requestId).removeValue();
+
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(userId).child(FirebaseRoot.DB_REQUEST_STATUS).setValue(RequestStatus.NO_REQUEST);
         removeRequestStatueListener();
