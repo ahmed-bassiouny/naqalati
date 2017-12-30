@@ -26,8 +26,8 @@ public class Driver extends User {
     private String model;
 
     public String getCarType() {
-        if(carType==null)
-            carType="";
+        if (carType == null)
+            carType = "";
         return carType;
     }
 
@@ -36,6 +36,8 @@ public class Driver extends User {
     }
 
     public String getCarNumber() {
+        if (carNumber == null)
+            carNumber = "";
         return carNumber;
     }
 

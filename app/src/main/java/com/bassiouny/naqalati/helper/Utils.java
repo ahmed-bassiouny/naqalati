@@ -80,16 +80,19 @@ public class Utils {
                 })
                 .show();
     }
-    public static void showImage(Context context, String url, ImageView imageView){
-        if(context==null)
+
+    public static void showImage(Activity activity, String url, ImageView imageView) {
+        if (activity == null && activity.isFinishing())
             return;
-        Glide.with(context).load(url)
+        Glide.with(activity).load(url)
                 .into(imageView);
     }
-    public static boolean isGpsEnable(Context context){
-        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+
+    public static boolean isGpsEnable(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
+
     public static void showDialog(Context context) {
         if (dialog == null) {
             dialog = new ACProgressFlower.Builder(context)
@@ -106,7 +109,7 @@ public class Utils {
             dialog.dismiss();
     }
 
-    public static String getCurrentDate(){
+    public static String getCurrentDate() {
         //                              day-months-year
         // this method return date today like 2017-2-19
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

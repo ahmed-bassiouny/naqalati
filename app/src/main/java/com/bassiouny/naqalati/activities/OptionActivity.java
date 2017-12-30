@@ -1,6 +1,8 @@
 package com.bassiouny.naqalati.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,11 +11,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.bassiouny.naqalati.R;
 import com.bassiouny.naqalati.helper.Constant;
 import com.bassiouny.naqalati.helper.SharedPref;
 import com.bassiouny.naqalati.model.FirebaseRoot;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +27,7 @@ public class OptionActivity extends AppCompatActivity implements View.OnClickLis
 
     private Spinner spinner;
     private EditText etShacehNumberCar;
+    private TextView tvVersion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +46,14 @@ public class OptionActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(new Intent(OptionActivity.this,MenuActivity.class));
             }
         });
+        tvVersion = findViewById(R.id.tv_version);
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            tvVersion.setText("نسخه رقم "+pInfo.versionName );
+        } catch (PackageManager.NameNotFoundException e) {
+            Crashlytics.logException(e);
+        }
+
     }
 
     @Override

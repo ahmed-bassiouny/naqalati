@@ -62,7 +62,9 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, request, locationListener);
     }
     public void removeListener(LocationListener locationListener) {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, locationListener);
+        if(mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, locationListener);
+        }
     }
 
 }

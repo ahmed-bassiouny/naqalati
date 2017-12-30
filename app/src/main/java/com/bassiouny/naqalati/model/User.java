@@ -28,6 +28,8 @@ public class User {
     }
 
     public String getUserAvatar() {
+        if (userAvatar == null)
+            userAvatar = "";
         return userAvatar;
     }
 
@@ -52,8 +54,8 @@ public class User {
     }
 
     public Double getLat() {
-        if(lat==null)
-            lat=0.0;
+        if (lat == null)
+            lat = 0.0;
         return lat;
     }
 
@@ -62,8 +64,8 @@ public class User {
     }
 
     public Double getLng() {
-        if(lng==null)
-            lng=0.0;
+        if (lng == null)
+            lng = 0.0;
         return lng;
     }
 
@@ -72,8 +74,8 @@ public class User {
     }
 
     public String getCurrentRequest() {
-        if(currentRequest==null)
-            currentRequest="";
+        if (currentRequest == null)
+            currentRequest = "";
         return currentRequest;
     }
 
@@ -90,8 +92,8 @@ public class User {
     }
 
     public String getNumberID() {
-        if(numberID==null)
-            numberID="";
+        if (numberID == null)
+            numberID = "";
         return numberID;
     }
 
@@ -100,8 +102,8 @@ public class User {
     }
 
     public String getAddress() {
-        if(address==null)
-            address="";
+        if (address == null)
+            address = "";
         return address;
     }
 
@@ -110,8 +112,8 @@ public class User {
     }
 
     public String getEmail() {
-        if(email==null)
-            email="";
+        if (email == null)
+            email = "";
         return email;
     }
 
@@ -120,8 +122,8 @@ public class User {
     }
 
     public String getToken() {
-        if(token == null)
-            token="";
+        if (token == null)
+            token = "";
         return token;
     }
 
