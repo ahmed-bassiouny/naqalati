@@ -225,6 +225,14 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                 CreateRealRequest();
                 setResult(Activity.RESULT_OK);
                 finish();
+                FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
+                        .child(driverId)
+                        .child(FirebaseRoot.DB_PENDING_REQUEST)
+                        .child(driverId+"-"+ userId).removeValue();
+
+                // delete this request from all requests root
+                FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_ALL_PENDING_REQUEST)
+                        .child(driverId+"-"+ userId).removeValue();
             }
         });
     }
