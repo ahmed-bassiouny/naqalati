@@ -87,6 +87,13 @@
         <item>معدات</item>
         <item>اتوبيس خاص</item>
         <item>اتوبيس رحلات</item>
+
+        <item>جرار فردانى تانك</item>
+        <item>نص نقل جامبو</item>
+        <item>تروسيكل نقل</item>
+        <item>سوزوكى نقل</item>
+        <item>نقل عفش</item>
+        <item>جامبو تانك</item>
     </array>
     <string name="terms"> اضغط هنا لمشاهدة شروط الاستخدام</string>
     <string name="accept_terms">موافق على شروط الاستخدام</string>

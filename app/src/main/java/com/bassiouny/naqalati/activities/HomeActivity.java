@@ -288,7 +288,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
     }
 
     private void getAllDriver() {
-        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER).orderByChild("online").equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
