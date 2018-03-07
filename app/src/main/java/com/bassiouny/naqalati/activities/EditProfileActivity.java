@@ -41,7 +41,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private CircleImageView profileImage;
     private TextView tvChooseImage;
     private ProgressBar progress;
-    private EditText etUserName,etUserID,etUserAddress;
+    private EditText etUserName,etUserID,etUserAddress,etPhone,etUserEmail;
     private Uri photoUri;
     String userId;
     Button signout;
@@ -59,6 +59,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         etUserID=findViewById(R.id.et_user_id);
         etUserAddress=findViewById(R.id.et_user_address);
         signout=findViewById(R.id.signout);
+        etPhone = findViewById(R.id.et_phone);
+        etUserEmail = findViewById(R.id.et_user_email);
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +117,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 etUserName.setText(user.getUserName());
                 etUserID.setText(user.getNumberID());
                 etUserAddress.setText(user.getAddress());
+                etUserEmail.setText(user.getEmail());
+                etPhone.setText(user.getUserPhone());
                 if(!user.getUserAvatar().isEmpty())
                     Utils.showImage(EditProfileActivity.this,user.getUserAvatar(),profileImage);
             }

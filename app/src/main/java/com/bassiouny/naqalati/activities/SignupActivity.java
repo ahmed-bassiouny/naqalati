@@ -177,6 +177,7 @@ public class SignupActivity extends AppCompatActivity {
         user.setEmail(etUserEmail.getText().toString());
         user.setCurrentRequest("");
         user.setRequestStatus(RequestStatus.NO_REQUEST);
+        user.setBlocked(false);
 
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())

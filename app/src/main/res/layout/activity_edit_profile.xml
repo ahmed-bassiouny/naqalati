@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/client"
     android:layoutDirection="rtl"
     android:textDirection="rtl"
-    android:layout_height="match_parent"
     tools:context="com.bassiouny.naqalati.activities.EditProfileActivity">
 
 
     <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/container"
+        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,48 +27,54 @@
             app:civ_border_width="2dp" />
 
         <TextView
+            android:id="@+id/tv_choose_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
+            android:visibility="gone"
             android:drawableStart="@drawable/ic_edit"
             android:gravity="center"
-            android:id="@+id/tv_choose_image"
             android:paddingBottom="30dp"
             android:text="@string/choose_image"
             android:textColor="@color/red_logo" />
 
 
         <EditText
+            android:id="@+id/et_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:enabled="false"
             android:background="@drawable/border_edit_text"
             android:drawablePadding="5dp"
             android:drawableStart="@drawable/ic_user"
             android:hint="@string/user_name"
             android:inputType="textPersonName"
             android:lines="1"
-            android:id="@+id/et_user_name"
             android:maxLines="1"
             android:minHeight="30dp"
             android:padding="5dp" />
+
         <EditText
+            android:id="@+id/et_user_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/border_edit_text"
+            android:digits="0123456789"
+            android:enabled="false"
             android:drawablePadding="5dp"
             android:drawableStart="@drawable/ic_id"
             android:hint="رقم البطاقة"
             android:inputType="number"
-            android:digits="0123456789"
             android:lines="1"
-            android:id="@+id/et_user_id"
             android:maxLines="1"
             android:minHeight="30dp"
             android:padding="5dp" />
+
         <EditText
+            android:id="@+id/et_user_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -77,36 +83,81 @@
             android:drawableStart="@drawable/ic_home"
             android:hint="عنوانك الشخصى"
             android:lines="1"
-            android:id="@+id/et_user_address"
+            android:enabled="false"
             android:maxLines="1"
             android:minHeight="30dp"
             android:padding="5dp" />
 
+
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_edit_text"
+            android:digits="0123456789"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_phone"
+            android:hint="@string/number_phone"
+            android:inputType="phone"
+            android:lines="1"
+            android:enabled="false"
+            android:maxLines="1"
+            android:minHeight="30dp"
+            android:padding="5dp" />
+
+        <EditText
+            android:id="@+id/et_user_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_edit_text"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_email"
+            android:hint="البريد الالكترونى"
+            android:lines="1"
+            android:maxLines="1"
+            android:minHeight="30dp"
+            android:enabled="false"
+            android:padding="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="ﻻ يمكنك تعديل بياناتك برجاء الرجوع للادارة"
+            android:textColor="@color/red_logo"
+            android:layout_margin="5dp"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
         <Button
+            android:id="@+id/btn_edit"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/border_button"
             android:gravity="center"
-            android:id="@+id/btn_edit"
             android:text="@string/edit"
             android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/signout"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/border_button_white"
+            android:text="@string/signout"
+            android:textColor="@color/red_logo"
             android:textStyle="bold" />
     </LinearLayout>
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/progress"/>
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/border_button_white"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/signout"
-        android:text="@string/signout"
-        android:textColor="@color/red_logo"
-        android:textStyle="bold" />
-</RelativeLayout>
+
+</ScrollView>

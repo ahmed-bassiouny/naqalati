@@ -18,6 +18,7 @@ public class User {
     private String address;
     private String email;
     private String token;
+    private Boolean isBlocked;
 
     public String getUserName() {
         return userName;
@@ -129,5 +130,15 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Boolean getBlocked() {
+        if(isBlocked == null)
+            return false;
+        return isBlocked;
+    }
+
+    public void setBlocked(Boolean blocked) {
+        isBlocked = blocked;
     }
 }

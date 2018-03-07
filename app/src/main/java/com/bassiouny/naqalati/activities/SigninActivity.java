@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -19,6 +20,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.bassiouny.naqalati.R;
 import com.bassiouny.naqalati.helper.Utils;
 import com.bassiouny.naqalati.model.FirebaseRoot;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -86,8 +91,35 @@ public class SigninActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
-            startActivity(new Intent(SigninActivity.this, OptionActivity.class));
-            finish();
+            startLogin();
+            Log.e( "updateUI: ",currentUser.getUid() );
+            FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
+                    .child(currentUser.getUid()).child("blocked").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Boolean isBlocked = dataSnapshot.getValue(Boolean.class);
+                    if (isBlocked !=null) {
+                        if (isBlocked) {
+                            startActivity(new Intent(SigninActivity.this, ExpiredActivity.class));
+                            finish();
+                            stopLogin();
+                        } else {
+                            stopLogin();
+                            startActivity(new Intent(SigninActivity.this, OptionActivity.class));
+                            finish();
+                        }
+                    } else {
+                        stopLogin();
+                        startActivity(new Intent(SigninActivity.this, OptionActivity.class));
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 
@@ -120,14 +152,15 @@ public class SigninActivity extends AppCompatActivity {
     }
 
     private void startLogin() {
-        btnSubmit.setEnabled(false);
+        btnSubmit.setVisibility(View.INVISIBLE);
         progress.setVisibility(View.VISIBLE);
     }
 
     private void stopLogin() {
-        btnSubmit.setEnabled(true);
+        btnSubmit.setVisibility(View.VISIBLE);
         progress.setVisibility(View.INVISIBLE);
     }
+
     @Override
     public void onBackPressed() {
         System.exit(0);

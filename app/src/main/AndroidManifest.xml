@@ -50,7 +50,8 @@
             android:theme="@style/myDialog" />
         <activity
             android:name=".activities.EditProfileActivity"
-            android:theme="@style/AppTheme.NoAction" />
+            android:theme="@style/AppTheme.NoAction"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activities.OptionActivity"
             android:theme="@style/AppTheme.NoAction" />
@@ -86,7 +87,7 @@
             android:theme="@style/AppThemeDialog" />
         <activity
             android:name=".activities.MessageActivity"
-            android:theme="@style/AppTheme.NoAction"></activity>
+            android:theme="@style/AppTheme.NoAction"/>
     </application>
 
 </manifest>
