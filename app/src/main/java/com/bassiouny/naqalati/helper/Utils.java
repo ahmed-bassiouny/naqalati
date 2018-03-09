@@ -17,6 +17,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Locale;
 
 import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
@@ -112,7 +113,7 @@ public class Utils {
     public static String getCurrentDate() {
         //                              day-months-year
         // this method return date today like 2017-2-19
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.ENGLISH);
         /*LocalDateTime now = LocalDateTime.now();*/
         return dateFormat.format(Calendar.getInstance().getTime());
     }

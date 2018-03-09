@@ -150,6 +150,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                 FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS)
                         .child(currentRequest).child(FirebaseRoot.DB_REQUEST_STATUS_IN_REQUESTS)
                         .setValue(RequestStatus.COMPLETE);
+                FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS)
+                        .child(currentRequest).child("endRequestDate")
+                        .setValue(Utils.getCurrentDate());
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +161,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener
                 FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS)
                         .child(currentRequest).child(FirebaseRoot.DB_REQUEST_STATUS_IN_REQUESTS)
                         .setValue(RequestStatus.CANCEL_FROM_USER);
+                FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_REQUESTS)
+                        .child(currentRequest).child("endRequestDate")
+                        .setValue(Utils.getCurrentDate());
             }
         });
     }

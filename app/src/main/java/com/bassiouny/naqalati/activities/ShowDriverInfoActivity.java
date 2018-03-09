@@ -69,13 +69,12 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
     private PlaceAutocompleteFragment fragmentStartPoint;
     private PlaceAutocompleteFragment fragmentEndPoint;
     private RequestInfo requestInfo ;
-    private CheckBox chSelectMyLocation;
+    private CheckBox chSelectMyLocation,chEmployee;
     private Driver driver;
     private TextView tvPrice;
     private Button btnAccept;
     private String priceRequest;
-    private TextInputEditText etProductType,etProductSize;
-
+    private TextInputEditText etProductType,etProductSize,etEmployeeNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +145,9 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                         return;
                     }else if(etProductSize.getText().toString().trim().isEmpty()){
                         etProductSize.setError("برجاء ادخال الكمية");
+                        return;
+                    }else if(chEmployee.isChecked() && etEmployeeNumber.getText().toString().isEmpty()){
+                        etEmployeeNumber.setError("برجاء ادخال عدد العمال");
                         return;
                     }
                     createRequest();
@@ -235,6 +237,16 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                         .child(driverId+"-"+ userId).removeValue();
             }
         });
+        chEmployee.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    etEmployeeNumber.setVisibility(View.VISIBLE);
+                }else {
+                    etEmployeeNumber.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void getDriverId() {
@@ -282,6 +294,8 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         chSelectMyLocation=findViewById(R.id.ch_select_myLocation);
         etProductType = findViewById(R.id.et_product_type);
         etProductSize = findViewById(R.id.et_product_size);
+        chEmployee = findViewById(R.id.ch_employee);
+        etEmployeeNumber = findViewById(R.id.et_employee_number);
     }
 
     @Override
@@ -299,6 +313,11 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
         //set product type and size
         requestInfo.setProductType(etProductType.getText().toString());
         requestInfo.setProductSize(etProductSize.getText().toString());
+        // set employee number
+        if(chEmployee.isChecked())
+            requestInfo.setEmployeeNumber(etEmployeeNumber.getText().toString());
+        else
+            requestInfo.setEmployeeNumber("0");
         // save request info in driver (pending requests root)
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_DRIVER)
                 .child(driverId).child(FirebaseRoot.DB_PENDING_REQUEST).child(requestId)

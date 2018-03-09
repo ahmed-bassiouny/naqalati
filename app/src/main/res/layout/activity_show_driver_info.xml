@@ -150,7 +150,31 @@
                 android:drawablePadding="5dp"
                 android:hint="الكمية" />
         </android.support.design.widget.TextInputLayout>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ch_employee"
+            android:text="هل تريد عمال مع السياره"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/border_edit_text"
+            android:layout_height="wrap_content">
 
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_employee_number"
+                android:maxLines="1"
+                android:lines="1"
+                android:inputType="number"
+                android:visibility="gone"
+                android:digits="123456789"
+                android:drawablePadding="5dp"
+                android:gravity="right"
+                android:text="1"
+                android:hint="عدد عمال" />
+        </android.support.design.widget.TextInputLayout>
         <Button
             android:id="@+id/btn_request_driver"
             android:layout_width="200dp"
