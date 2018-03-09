@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bassiouny.naqalati.helper.SharedPref;
+import com.bassiouny.naqalati.model.User;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -92,34 +94,7 @@ public class SigninActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             startLogin();
-            Log.e( "updateUI: ",currentUser.getUid() );
-            FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
-                    .child(currentUser.getUid()).child("blocked").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Boolean isBlocked = dataSnapshot.getValue(Boolean.class);
-                    if (isBlocked !=null) {
-                        if (isBlocked) {
-                            startActivity(new Intent(SigninActivity.this, ExpiredActivity.class));
-                            finish();
-                            stopLogin();
-                        } else {
-                            stopLogin();
-                            startActivity(new Intent(SigninActivity.this, OptionActivity.class));
-                            finish();
-                        }
-                    } else {
-                        stopLogin();
-                        startActivity(new Intent(SigninActivity.this, OptionActivity.class));
-                        finish();
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+            getInfoFromDB(currentUser.getUid());
         }
     }
 
@@ -161,6 +136,34 @@ public class SigninActivity extends AppCompatActivity {
         progress.setVisibility(View.INVISIBLE);
     }
 
+    private void getInfoFromDB(String myId) {
+        FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER).child(myId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null && user.getUserPhone()!= null) {
+                    if (user.getBlocked()) {
+                        startActivity(new Intent(SigninActivity.this, ExpiredActivity.class));
+                        finish();
+                        stopLogin();
+                    } else {
+                        stopLogin();
+                        startActivity(new Intent(SigninActivity.this, OptionActivity.class));
+                        finish();
+                    }
+                } else {
+                    Utils.ContactSuppot(SigninActivity.this);
+                }
+                stopLogin();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Utils.ContactSuppot(SigninActivity.this);
+                stopLogin();
+            }
+        });
+    }
     @Override
     public void onBackPressed() {
         System.exit(0);
