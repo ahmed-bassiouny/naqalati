@@ -19,6 +19,8 @@ public class User {
     private String email;
     private String token;
     private Boolean isBlocked;
+    private String taxFile;
+    private String taxRecord;
 
     public String getUserName() {
         return userName;
@@ -140,5 +142,25 @@ public class User {
 
     public void setBlocked(Boolean blocked) {
         isBlocked = blocked;
+    }
+
+    public String getTaxFile() {
+        if(taxFile == null)
+            taxFile = "";
+        return taxFile;
+    }
+
+    public void setTaxFile(String taxFile) {
+        this.taxFile = taxFile;
+    }
+
+    public String getTaxRecord() {
+        if(taxRecord == null)
+            taxRecord = "";
+        return taxRecord;
+    }
+
+    public void setTaxRecord(String taxRecord) {
+        this.taxRecord = taxRecord;
     }
 }

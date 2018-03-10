@@ -45,7 +45,9 @@ public class SignupActivity extends AppCompatActivity {
     private ProgressBar progress;
     private Button btnRegister;
     private CheckBox chTerms;
-    private EditText etPhone, etPassword, etConfirmPassword, etName,etUserID,etUserAddress,etUserEmail;
+    private EditText etPhone, etPassword, etConfirmPassword,
+            etName,etUserID,etUserAddress,etUserEmail
+            ,etTaxFile,etTaxRecord;
     private final int requestLocationPermission =123;
 
     private Uri photoUri;
@@ -142,6 +144,8 @@ public class SignupActivity extends AppCompatActivity {
         etUserEmail=findViewById(R.id.et_user_email);
         chTerms = findViewById(R.id.ch_terms);
         tvTerms = findViewById(R.id.tv_terms);
+        etTaxFile = findViewById(R.id.et_tax_file);
+        etTaxRecord = findViewById(R.id.et_tax_record);
     }
 
     @Override
@@ -178,6 +182,8 @@ public class SignupActivity extends AppCompatActivity {
         user.setCurrentRequest("");
         user.setRequestStatus(RequestStatus.NO_REQUEST);
         user.setBlocked(false);
+        user.setTaxFile(etTaxFile.getText().toString());
+        user.setTaxRecord(etTaxRecord.getText().toString());
 
         FirebaseDatabase.getInstance().getReference(FirebaseRoot.DB_USER)
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())

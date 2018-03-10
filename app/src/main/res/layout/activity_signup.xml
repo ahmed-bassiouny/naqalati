@@ -143,6 +143,37 @@
             android:maxLines="1"
             android:minHeight="30dp"
             android:padding="5dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/red_logo"
+            android:layout_margin="5dp"
+            android:text="البيانات التاليه للشركات"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_edit_text"
+            android:drawablePadding="5dp"
+            android:lines="1"
+            android:hint="الملف الضريبى"
+            android:id="@+id/et_tax_file"
+            android:maxLines="1"
+            android:minHeight="30dp"
+            android:padding="5dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_edit_text"
+            android:drawablePadding="5dp"
+            android:hint="السجل الضريبى"
+            android:lines="1"
+            android:id="@+id/et_tax_record"
+            android:maxLines="1"
+            android:minHeight="30dp"
+            android:padding="5dp" />
 
         <CheckBox
             android:layout_width="wrap_content"
