@@ -108,6 +108,16 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                         haveRequest=false;
                         imgClose.setVisibility(View.VISIBLE);
                         containerSubInfo.setVisibility(View.INVISIBLE);
+                        if(driver.getCarType().equals("اتوبيس خاص")||driver.getCarType().equals("اتوبيس رحلات")){
+                            etProductType.setVisibility(View.GONE);
+                            etProductSize.setText("عدد الركاب");
+                            chEmployee.setVisibility(View.GONE);
+                            chEmployee.setChecked(false);
+                        }else {
+                            etProductType.setVisibility(View.VISIBLE);
+                            etProductSize.setText("الكمية");
+                            chEmployee.setVisibility(View.VISIBLE);
+                        }
                     }else{
                         // this driver busy so show info request
                         btnRequestDriver.setText(getString(R.string.cancel_request));
@@ -140,11 +150,11 @@ public class ShowDriverInfoActivity extends AppCompatActivity {
                     }else if(requestInfo.getEndPoint()==null){
                         Toast.makeText(ShowDriverInfoActivity.this, getString(R.string.end_point), Toast.LENGTH_SHORT).show();
                         return;
-                    }else if(etProductType.getText().toString().trim().isEmpty()){
+                    }else if(etProductType.getVisibility()==View.VISIBLE && etProductType.getText().toString().trim().isEmpty()){
                         etProductType.setError("برجاء ادخال نوع البضاعة");
                         return;
                     }else if(etProductSize.getText().toString().trim().isEmpty()){
-                        etProductSize.setError("برجاء ادخال الكمية");
+                        etProductSize.setError("برجاء ادخال العدد");
                         return;
                     }else if(chEmployee.isChecked() && etEmployeeNumber.getText().toString().isEmpty()){
                         etEmployeeNumber.setError("برجاء ادخال عدد العمال");
